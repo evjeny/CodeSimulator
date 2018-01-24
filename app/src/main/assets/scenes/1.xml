@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene type="text_scene">
+    <act>
+        <content>
+            <ci>@string/s1_a1</ci>
+            <ci>@string/s1_a2</ci>
+            <ci>@string/s1_a3</ci>
+            <ci>@string/s1_a4</ci>
+        </content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>next</action>
+            </button>
+        </bar>
+    </act>
+</scene>

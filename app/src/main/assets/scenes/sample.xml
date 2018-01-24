@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene type="text_scene"> <!--text_scene, image_scene_code_scene-->
+    <act>
+        <content>
+            <ci>@string/what</ci>
+        </content>
+        <bar>
+            <button>
+                <text>@string/next</text>
+                <action>next</action>
+            </button>
+            <button>
+                <text>@string/stop</text>
+                <action>stop</action>
+            </button>
+        </bar>
+    </act>
+</scene>

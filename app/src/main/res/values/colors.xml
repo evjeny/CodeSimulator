@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    
+    <color name="console_black">#000000</color>
+    <color name="console_green">#14ff14</color>
+    <color name="console_green_dark">#098309</color>
+    <color name="console_grey">#4b4b4b</color>
+    <color name="console_red">#790000</color>
+</resources>

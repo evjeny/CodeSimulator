@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/console_green</item>
+        <item name="colorPrimaryDark">@color/console_green_dark</item>
+        <item name="colorAccent">@color/console_red</item>
+
+        <item name="android:background">@color/console_black</item>
+        <item name="android:colorBackground">@color/console_black</item>
+        <item name="android:textColorPrimary">@color/console_green</item>
+        <item name="android:textColorPrimaryInverse">@color/console_green_dark</item>
+        <item name="android:textColorSecondary">@color/console_green_dark</item>
+        <item name="android:windowBackground">@color/console_black</item>
+        <item name="android:textColorSecondaryInverse">@color/console_green</item>
+        <item name="android:colorForeground">@color/console_black</item>
+    </style>
+
+    <style name="Console" parent="AppTheme">
+        <item name="android:textViewStyle">@style/Console.TextView</item>
+        <item name="android:buttonStyle">@style/Console.Button</item>
+        <item name="android:fontFamily">monospace</item>
+    </style>
+
+    <style name="Console.TextView">
+        <item name="android:background">@color/console_black</item>
+        <item name="android:textColor">@color/console_green</item>
+    </style>
+    <style name="Console.Button">
+        <item name="android:background">@drawable/console_button_drawable</item>
+        <item name="android:textColor">@color/console_green</item>
+        <item name="android:padding">@dimen/button_padding</item>
+    </style>
+
+    <dimen name="button_padding">10dp</dimen>
+</resources>
