@@ -1,8 +1,10 @@
 package com.evjeny.hackersimulator.view;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import com.evjeny.hackersimulator.game.Bar;
 import com.evjeny.hackersimulator.game.Button;
 import com.evjeny.hackersimulator.game.CodeContent;
 import com.evjeny.hackersimulator.game.CodePart;
+import com.evjeny.hackersimulator.game.GameType;
 import com.evjeny.hackersimulator.game.ImageContent;
 import com.evjeny.hackersimulator.game.Scene;
 import com.evjeny.hackersimulator.game.StoryContent;
@@ -30,11 +33,18 @@ public class SceneGenerator {
     private FragmentManager manager;
     private ViewGroup fragmentHolder, buttonHolder;
 
-    public SceneGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder, ViewGroup buttonHolder) {
+    private Bundle args;
+
+    public SceneGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
+                          ViewGroup buttonHolder, GameType type) {
         this.context = context;
         this.manager = manager;
         this.fragmentHolder = fragmentHolder;
         this.buttonHolder = buttonHolder;
+        this.args = new Bundle();
+        int style = type == GameType.proger ? R.style.ProgerTheme : R.style.HackerTheme;
+        Log.d("SceneGenerator", "GameType: " + type.text + ", style_int: " + style);
+        this.args.putInt("style", style);
     }
 
     public void generateSceneAuto(final Scene scene, final storyInterface intf) {
@@ -56,6 +66,7 @@ public class SceneGenerator {
 
     private void generateStoryScene(final Scene scene, final storyInterface intf) {
         final MessageFragment messageFragment = new MessageFragment();
+        messageFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(fragmentHolder.getId(), messageFragment);
         transaction.runOnCommit(new Runnable() {
@@ -99,6 +110,7 @@ public class SceneGenerator {
 
     private void generateImageScene(final Scene scene, final storyInterface intf) {
         final ImageFragment imageFragment = new ImageFragment();
+        imageFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(fragmentHolder.getId(), imageFragment);
         transaction.runOnCommit(new Runnable() {
@@ -143,6 +155,7 @@ public class SceneGenerator {
 
     private void generateCodeScene(final Scene scene, final storyInterface intf) {
         final CodeFragment codeFragment = new CodeFragment();
+        codeFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(fragmentHolder.getId(), codeFragment);
         transaction.runOnCommit(new Runnable() {

@@ -1,93 +1,56 @@
 package com.evjeny.hackersimulator.view;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.evjeny.hackersimulator.R;
-import com.evjeny.hackersimulator.game.Scene;
-import com.evjeny.hackersimulator.game.StoryEndException;
-import com.evjeny.hackersimulator.game.Storyline;
+import com.evjeny.hackersimulator.game.GameSave;
 
-import org.xmlpull.v1.XmlPullParserException;
+/**
+ * Created by Evjeny on 25.01.2018 17:59.
+ */
 
-import java.io.IOException;
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity{
 
-public class MainActivity extends FragmentActivity {
-
-    private SharedPreferences sp;
-    private Storyline storyline;
-    private SceneGenerator generator;
-    private pcInterface pointerChangedInterface;
-
-    private LinearLayout main_fragment, main_bar;
-
-    private int pointer;
+    private final int CREATE_GAME =  0, CONTINUE_GAME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        main_fragment = findViewById(R.id.main_fragment);
-        main_bar = findViewById(R.id.main_bar);
-
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
-        storyline = new Storyline(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        generator = new SceneGenerator(this,
-                fragmentManager, main_fragment, main_bar);
-
-        //initialing pointer
-        pointer = 1;
-
-        pointerChangedInterface = new pcInterface() {
-            @Override
-            public void onPointerChanged() {
-                try {
-                    Scene current = storyline.get(pointer);
-                    generator.generateSceneAuto(current, new SceneGenerator.storyInterface() {
-                        @Override
-                        public void nextAct() {
-
-                        }
-
-                        @Override
-                        public void stop() {
-
-                        }
-
-                        @Override
-                        public void check(ArrayList<String> code) {
-                            //checking code here
-                        }
-
-                        @Override
-                        public void end() {
-                            pointer++;
-                            pointerChangedInterface.onPointerChanged();
-                        }
-                    });
-
-                } catch (StoryEndException e) {
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Thx 4 playing!", Toast.LENGTH_SHORT).show();
-                } catch (IOException | XmlPullParserException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        pointerChangedInterface.onPointerChanged();
     }
 
-    private interface pcInterface {
-        void onPointerChanged();
+    public void continue_game(View v) {
+        Intent levelReader = new Intent(this, LevelReader.class);
+        startActivityForResult(levelReader, CONTINUE_GAME);
     }
 
+    public void new_game(View v) {
+        Intent levelCreator = new Intent(this, LevelCreator.class);
+        startActivityForResult(levelCreator, CREATE_GAME);
+    }
+
+    public void notebook(View v) {
+        Intent nb = new Intent(this, NotebookActivity.class);
+        startActivity(nb);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CREATE_GAME && resultCode == RESULT_OK) {
+            GameSave save = (GameSave) data.getSerializableExtra("save");
+            Intent mainStory = new Intent(this, MainStory.class);
+            mainStory.putExtra("save", save);
+            startActivity(mainStory);
+        } else if (requestCode == CONTINUE_GAME && resultCode == RESULT_OK) {
+            GameSave save = (GameSave) data.getSerializableExtra("save");
+            Intent mainStory = new Intent(this, MainStory.class);
+            mainStory.putExtra("save", save);
+            startActivity(mainStory);
+        }
+    }
 }

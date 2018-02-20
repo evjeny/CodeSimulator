@@ -3,4 +3,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="next">Next</string>
+    <string name="new_game">New game</string>
+    <string name="continue_game">Continue game</string>
+    <string name="level_name">Level name</string>
+    <string name="player_name">Player name</string>
+    <string name="hacker_simulator">Hacker simulator</string>
+    <string name="proger_simulator">Proger simulator</string>
+    <string name="create">Create</string>
+    <string name="fields_not_empty">Fields mustn\'t be empty</string>
+    <string name="error">Error</string>
+    <string name="notebook">Notebook</string>
+    <string name="remove_q">Remove?</string>
 </resources>

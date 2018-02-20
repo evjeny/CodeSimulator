@@ -2,10 +2,9 @@ package com.evjeny.hackersimulator.game;
 
 import android.content.Context;
 
-import com.evjeny.hackersimulator.R;
-
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -15,15 +14,18 @@ import java.io.IOException;
 public class Storyline {
 
     private Context context;
-    private FileLocalizer localizer;
+    private SceneLocalizer localizer;
 
-    public Storyline(Context context) {
+    private int size;
+
+    public Storyline(Context context, GameType type) throws IOException {
         this.context = context;
-        this.localizer = new FileLocalizer(context);
+        this.localizer = new SceneLocalizer(context, type);
+        this.size = context.getAssets().list(type.text + File.separator + "scenes").length;
     }
 
     public Scene get(int pos) throws StoryEndException, IOException, XmlPullParserException {
-        if (pos <= context.getResources().getInteger(R.integer.mx_n_scene)) {
+        if (pos <= size) {
             try {
                 return localizer.get(pos);
             } catch (IOException | XmlPullParserException e) {

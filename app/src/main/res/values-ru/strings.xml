@@ -4,4 +4,15 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="next">Далее</string>
+    <string name="new_game">Новая игра</string>
+    <string name="continue_game">Продолжить игру</string>
+    <string name="player_name">Имя игрока</string>
+    <string name="hacker_simulator">Симулятор хакера</string>
+    <string name="proger_simulator">Симулятор программиста</string>
+    <string name="create">Создать</string>
+    <string name="level_name">Название уровня</string>
+    <string name="fields_not_empty">Поля должны быть непустыми</string>
+    <string name="error">Ошибка</string>
+    <string name="notebook">Блокнот</string>
+    <string name="remove_q">Удалить?</string>
 </resources>

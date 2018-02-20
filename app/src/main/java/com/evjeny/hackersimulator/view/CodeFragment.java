@@ -16,11 +16,19 @@ import com.evjeny.hackersimulator.R;
  */
 
 public class CodeFragment extends Fragment {
+
+    public CodeFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.Console);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), getStyle());
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         return localInflater.inflate(R.layout.code_fragment, container, false);
+    }
+
+    private int getStyle() {
+        return getArguments().getInt("style");
     }
 }

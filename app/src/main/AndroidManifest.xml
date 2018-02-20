@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.MainStory" />
+        <activity android:name=".view.LevelCreator" />
+        <activity android:name=".view.LevelReader" />
+        <activity android:name=".view.NotebookActivity" />
+
     </application>
 
 </manifest>

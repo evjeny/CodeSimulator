@@ -7,4 +7,6 @@
     <string name="s1_a4">Итак, если ты готов принять наше предложение и освободить мир от зла, нажми [Далее].</string>
     <string name="s3_a1">def __main(self):\n\ta = 10</string>
     <string name="s3_a2">\tc = b * a</string>
+
+    <string name="data_types">Data types</string>
 </resources>

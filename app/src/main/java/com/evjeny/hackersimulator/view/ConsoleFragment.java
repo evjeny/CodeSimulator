@@ -19,12 +19,19 @@ public class ConsoleFragment extends Fragment {
 
     public View rootView;
 
+    public ConsoleFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.Console);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), getStyle());
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         rootView = localInflater.inflate(R.layout.console_fragment, container, false);
         return rootView;
+    }
+
+    private int getStyle() {
+        return getArguments().getInt("style");
     }
 }
