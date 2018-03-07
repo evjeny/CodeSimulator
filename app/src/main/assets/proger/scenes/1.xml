@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene type="text_scene">
-    <act>
+<scene>
+    <act type="text">
         <content>
             <ci>Hello</ci>
             <ci>It's proger simulator</ci>
@@ -12,5 +12,12 @@
                 <action>next</action>
             </button>
         </bar>
+    </act>
+    <act type="image">
+        <content>
+            <ci>
+
+            </ci>
+        </content>
     </act>
 </scene>

@@ -1,5 +1,6 @@
 package com.evjeny.hackersimulator.view;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.evjeny.hackersimulator.R;
 import com.evjeny.hackersimulator.game.FileLocalizer;
@@ -39,8 +39,10 @@ public class NotebookActivity extends AppCompatActivity {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                    Toast.makeText(NotebookActivity.this,
-                            adapter.getItem(pos).filepath, Toast.LENGTH_SHORT).show();
+                    Intent viewerIntent = new Intent(NotebookActivity.this,
+                            NotebookViewerActivity.class);
+                    viewerIntent.putExtra("noteItem", adapter.getItem(pos));
+                    startActivity(viewerIntent);
                 }
             });
         } catch (IOException e) {

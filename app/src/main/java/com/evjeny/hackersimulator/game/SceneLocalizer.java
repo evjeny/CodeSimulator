@@ -17,10 +17,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Evjeny on 20.01.2018 16:44.
+ * Created by evjeny on 20.01.2018 16:44 6:44.
  */
 
-public class SceneLocalizer {
+class SceneLocalizer {
 
     private Context context;
     private AssetManager manager;
@@ -28,139 +28,164 @@ public class SceneLocalizer {
     private String type_prefix;
     private String REGEX_RESOURCE_STRING = "@string/([A-Za-z0-9-_]*)";
 
-    public SceneLocalizer(Context context, GameType type) {
+    private final static String sceneTag = "scene",
+    actTag = "act", contentTag = "content", contentItemTag = "ci",
+    barTag = "bar", buttonTag = "button", nameTag = "name", actionTag = "action",
+    typeTag = "type";
+    private final static String textType = "text", imageType = "image", codeType = "code";
+
+    SceneLocalizer(Context context, GameType type) {
         this.context = context;
         this.manager = context.getAssets();
         this.type_prefix = type.text;
     }
 
-    public Scene get(int num) throws IOException, XmlPullParserException {
+    Scene get(int num) throws IOException, XmlPullParserException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         XmlPullParser parser = factory.newPullParser();
         InputStream raw = manager.open(type_prefix + "/scenes/" + num + ".xml");
         parser.setInput(raw, null);
         int eventType = parser.getEventType();
 
-        Scene result;
-        SceneType type = null;
-        Act act = null;
-        Content content = null;
+        Scene result = null;
+
+        ArrayList<Act> acts = new ArrayList<>();
+        ActType actType = null;
+
         ArrayList<Object> contents = null;
+        Content content = null;
+
         Bar bar = null;
         ArrayList<Button> buttons = null;
         Button button = null;
-        String btype = "text";
-        Object bname = null;
-        String action = null;
 
+        String buttonType = "text";
+        Object buttonName = null;
+        String action = null;
 
         while (eventType != XmlResourceParser.END_DOCUMENT) {
             if (eventType == XmlResourceParser.START_TAG) {
                 String name = parser.getName();
-                if (name.equals("scene")) {
-                    for (int i = 0; i < parser.getAttributeCount(); i++) {
-                        if (parser.getAttributeName(i).equals("type")) {
-                            switch (parser.getAttributeValue(i)) {
-                                case "text_scene":
-                                    type = SceneType.STORY;
-                                    break;
-                                case "image_scene":
-                                    type = SceneType.IMAGE;
-                                    break;
-                                case "code_scene":
-                                    type = SceneType.CODE;
-                                    break;
-                                default:
-                                    type = SceneType.STORY;
-                                    break;
+                switch (name) {
+                    case sceneTag:
+                        break;
+                    case actTag:
+                        for (int i = 0; i < parser.getAttributeCount(); i++) {
+                            if (parser.getAttributeName(i).equals(typeTag)) {
+                                switch (parser.getAttributeValue(i)) {
+                                    case textType:
+                                        actType = ActType.STORY;
+                                        break;
+                                    case imageType:
+                                        actType = ActType.IMAGE;
+                                        break;
+                                    case codeType:
+                                        actType = ActType.CODE;
+                                        break;
+                                    default:
+                                        actType = ActType.STORY;
+                                        break;
+                                }
                             }
                         }
-                    }
-                } else if (name.equals("act")) {
-                } else if (name.equals("content")) {
-                    contents = new ArrayList<>();
-                } else if (name.equals("ci")) {
-                    switch (type) {
-                        case STORY:
-                            contents.add(getValFromText(parser.nextText()));
-                            break;
-                        case IMAGE:
-                            contents.add(getImageFromText(parser.nextText()));
-                            break;
-                        case CODE:
-                            String codeType = parser.getAttributeValue(null, "type");
-                            CodePart codePart = null;
-                            if (codeType.equals("code")) {
-                                codePart = new CodePart(CodePart.Type.WRITABLE,
-                                        replaceResourceStrings(parser.nextText()));
-                            } else if (codeType.equals("text")) {
-                                codePart = new CodePart(CodePart.Type.TEXT,
-                                        replaceResourceStrings(parser.nextText()));
-                            }
-                            contents.add(codePart);
-                            break;
-                        default:
-                            contents.add(getValFromText(parser.nextText()));
-                            break;
-                    }
-                } else if (name.equals("bar")) {
-                    buttons = new ArrayList<>();
-                } else if (name.equals("button")) {
-                    for (int i = 0; i < parser.getAttributeCount(); i++) {
-                        if (parser.getAttributeName(i).equals("type")) {
-                            btype = parser.getAttributeValue(i);
+                        break;
+                    case contentTag:
+                        contents = new ArrayList<>();
+                        break;
+                    case contentItemTag:
+                        switch (actType) {
+                            case STORY:
+                                contents.add(getValFromText(parser.nextText()));
+                                break;
+                            case IMAGE:
+                                contents.add(getImageFromText(parser.nextText()));
+                                break;
+                            case CODE:
+                                String codeType = parser.getAttributeValue(null, typeTag);
+                                CodePart codePart = null;
+                                if (codeType.equals(codeType)) { // FIXME: 07.03.2018
+                                    codePart = new CodePart(CodePart.Type.WRITABLE,
+                                            replaceResourceStrings(parser.nextText()));
+                                } else if (codeType.equals(textType)) {
+                                    codePart = new CodePart(CodePart.Type.TEXT,
+                                            replaceResourceStrings(parser.nextText()));
+                                }
+                                contents.add(codePart);
+                                break;
+                            default:
+                                contents.add(getValFromText(parser.nextText()));
+                                break;
                         }
-                    }
-                } else if (name.equals("name")) {
-                    bname = parser.nextText();
-                } else if (name.equals("action")) {
-                    action = parser.nextText();
+                        break;
+                    case barTag:
+                        buttons = new ArrayList<>();
+                        break;
+                    case buttonTag:
+                        for (int i = 0; i < parser.getAttributeCount(); i++) {
+                            if (parser.getAttributeName(i).equals(typeTag)) {
+                                buttonType = parser.getAttributeValue(i);
+                            }
+                        }
+                        break;
+                    case nameTag:
+                        buttonName = parser.nextText();
+                        break;
+                    case actionTag:
+                        action = parser.nextText();
+                        break;
                 }
             } else if (parser.getEventType() == XmlPullParser.END_TAG) {
                 String name = parser.getName();
                 ArrayList<String> messages = new ArrayList<>();
-                if (name.equals("content")) {
-                    switch (type) {
-                        case STORY:
-                            for (Object con : contents) messages.add(con.toString());
-                            content = new StoryContent(messages);
-                            break;
-                        case IMAGE:
-                            ArrayList<Bitmap> images = new ArrayList<>();
-                            for (Object con : contents) images.add((Bitmap) con);
-                            content = new ImageContent(images);
-                            break;
-                        case CODE:
-                            ArrayList<CodePart> parts = new ArrayList<>();
-                            for (Object con : contents) parts.add((CodePart) con);
-                            content = new CodeContent(parts);
-                            break;
-                        default:
-                            for (Object con : contents) messages.add(con.toString());
-                            content = new StoryContent(messages);
-                            break;
-                    }
-                } else if (name.equals("button")) {
-                    switch (btype) {
-                        case "text":
-                            button = new TextButton(getValFromText((String) bname), action);
-                            break;
-                        case "image":
-                            break;
-                        default:
-                            button = new TextButton((String) bname, action);
-                            break;
-                    }
-                    buttons.add(button);
-                } else if (name.equals("bar")) {
-                    bar = new Bar(buttons);
-                } else if (name.equals("act")) {
-                    act = new Act(content, bar);
+                switch (name) {
+                    case contentTag:
+                        switch (actType) {
+                            case STORY:
+                                for (Object con : contents) messages.add(con.toString());
+                                content = new StoryContent(messages);
+                                break;
+                            case IMAGE:
+                                ArrayList<Bitmap> images = new ArrayList<>();
+                                for (Object con : contents) images.add((Bitmap) con);
+                                content = new ImageContent(images);
+                                break;
+                            case CODE:
+                                ArrayList<CodePart> parts = new ArrayList<>();
+                                for (Object con : contents) parts.add((CodePart) con);
+                                content = new CodeContent(parts);
+                                break;
+                            default:
+                                for (Object con : contents) messages.add(con.toString());
+                                content = new StoryContent(messages);
+                                break;
+                        }
+                        break;
+                    case buttonTag:
+                        switch (buttonType) {
+                            case textType:
+                                button = new TextButton(getValFromText((String) buttonName), action);
+                                break;
+                            case imageType:
+                                break;
+                            default:
+                                button = new TextButton((String) buttonName, action);
+                                break;
+                        }
+                        buttons.add(button);
+                        break;
+                    case barTag:
+                        bar = new Bar(buttons);
+                        break;
+                    case actTag:
+                        acts.add(new Act(actType, content, bar));
+                        break;
+                    case sceneTag:
+                        result = new Scene(acts);
+                        break;
                 }
             }
             eventType = parser.next();
         }
-        result = new Scene(type, act);
         return result;
     }
 

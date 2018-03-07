@@ -1,17 +1,17 @@
 package com.evjeny.hackersimulator.game;
 
+import java.util.ArrayList;
+
 /**
  * Created by Evjeny on 19.01.2018 5:58.
  */
 
 public class Scene {
 
-    public final SceneType type;
-    public final Act act;
+    public final ArrayList<Act> acts;
 
-    public Scene(SceneType type, Act act) {
-        this.type = type;
-        this.act = act;
+    public Scene(ArrayList<Act> acts) {
+        this.acts = acts;
     }
 
 }

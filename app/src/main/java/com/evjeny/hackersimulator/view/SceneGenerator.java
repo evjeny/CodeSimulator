@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.evjeny.hackersimulator.R;
+import com.evjeny.hackersimulator.game.Act;
 import com.evjeny.hackersimulator.game.Bar;
 import com.evjeny.hackersimulator.game.Button;
 import com.evjeny.hackersimulator.game.CodeContent;
@@ -21,11 +22,12 @@ import com.evjeny.hackersimulator.game.GameType;
 import com.evjeny.hackersimulator.game.ImageContent;
 import com.evjeny.hackersimulator.game.Scene;
 import com.evjeny.hackersimulator.game.StoryContent;
+import com.pixplicity.htmlcompat.HtmlCompat;
 
 import java.util.ArrayList;
 
 /**
- * Created by Evjeny on 21.01.2018 10:08.
+ * Created by evjeny on 21.01.2018 10:08 6:41.
  */
 
 public class SceneGenerator {
@@ -35,8 +37,8 @@ public class SceneGenerator {
 
     private Bundle args;
 
-    public SceneGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
-                          ViewGroup buttonHolder, GameType type) {
+    SceneGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
+                   ViewGroup buttonHolder, GameType type) {
         this.context = context;
         this.manager = manager;
         this.fragmentHolder = fragmentHolder;
@@ -47,24 +49,30 @@ public class SceneGenerator {
         this.args.putInt("style", style);
     }
 
-    public void generateSceneAuto(final Scene scene, final storyInterface intf) {
-        switch (scene.type) {
+    public void generateScene(final Scene scene, final storyInterface intf) {
+        for (Act act: scene.acts) {
+            generateActAuto(act, intf);
+        }
+    }
+
+    public void generateActAuto(final Act act, final storyInterface intf) {
+        switch (act.type) {
             case STORY:
-                generateStoryScene(scene, intf);
+                generateStoryAct(act, intf);
                 break;
             case IMAGE:
-                generateImageScene(scene, intf);
+                generateImageAct(act, intf);
                 break;
             case CODE:
-                generateCodeScene(scene, intf);
+                generateCodeAct(act, intf);
                 break;
             default:
-                generateStoryScene(scene, intf);
+                generateStoryAct(act, intf);
                 break;
         }
     }
 
-    private void generateStoryScene(final Scene scene, final storyInterface intf) {
+    private void generateStoryAct(final Act act, final storyInterface intf) {
         final MessageFragment messageFragment = new MessageFragment();
         messageFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -73,10 +81,11 @@ public class SceneGenerator {
             @Override
             public void run() {
                 final TextView mf_tv = messageFragment.getView().findViewById(R.id.message_fragment_tv);
-                final StoryContent content = (StoryContent) scene.act.content;
+                final StoryContent content = (StoryContent) act.content;
                 final int[] pointer = {0};
-                mf_tv.setText(content.getMessage(pointer[0]));
-                Bar bar = scene.act.bar;
+                mf_tv.setText(HtmlCompat.fromHtml(context, content.getMessage(pointer[0]),
+                        HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
+                Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
                     android.widget.Button b = new android.widget.Button(context);
@@ -93,7 +102,8 @@ public class SceneGenerator {
                                 pointer[0]++;
                                 if (pointer[0] < content.getMessages().size()) {
                                     intf.nextAct();
-                                    mf_tv.setText(content.getMessage(pointer[0]));
+                                    mf_tv.setText(HtmlCompat.fromHtml(context, content.getMessage(pointer[0]),
+                                            HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
                                 } else
                                     intf.end();
                             } else if (button.action.equals("stop")) {
@@ -108,7 +118,7 @@ public class SceneGenerator {
         transaction.commit();
     }
 
-    private void generateImageScene(final Scene scene, final storyInterface intf) {
+    private void generateImageAct(final Act act, final storyInterface intf) {
         final ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -118,10 +128,10 @@ public class SceneGenerator {
             public void run() {
                 final ImageView imageView =
                         imageFragment.getView().findViewById(R.id.image_fragment_imageview);
-                final ImageContent content = (ImageContent) scene.act.content;
+                final ImageContent content = (ImageContent) act.content;
                 final int[] pointer = {0};
                 imageView.setImageBitmap(content.getImage(pointer[0]));
-                Bar bar = scene.act.bar;
+                Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
                     android.widget.Button b = new android.widget.Button(context);
@@ -153,7 +163,7 @@ public class SceneGenerator {
         transaction.commit();
     }
 
-    private void generateCodeScene(final Scene scene, final storyInterface intf) {
+    private void generateCodeAct(final Act act, final storyInterface intf) {
         final CodeFragment codeFragment = new CodeFragment();
         codeFragment.setArguments(args);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -163,7 +173,7 @@ public class SceneGenerator {
             public void run() {
                 final LinearLayout holder =
                         codeFragment.getView().findViewById(R.id.code_fragment_holder);
-                final CodeContent content = (CodeContent) scene.act.content;
+                final CodeContent content = (CodeContent) act.content;
                 final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 final ArrayList<TextView> parts = new ArrayList<>();
@@ -183,7 +193,7 @@ public class SceneGenerator {
                         parts.add(editText);
                     }
                 }
-                Bar bar = scene.act.bar;
+                Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
                     android.widget.Button b = new android.widget.Button(context);
@@ -213,6 +223,8 @@ public class SceneGenerator {
     }
 
     public interface storyInterface {
+        void nextContent();
+
         void nextAct();
 
         void stop();

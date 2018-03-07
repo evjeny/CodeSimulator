@@ -7,8 +7,7 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="ProgerTheme" parent="AppTheme">
-    </style>
+    <style name="ProgerTheme" parent="AppTheme"></style>
 
     <style name="HackerTheme">
         <item name="colorPrimary">@color/green</item>
@@ -32,11 +31,21 @@
         <item name="android:background">@color/black</item>
         <item name="android:textColor">@color/green</item>
     </style>
+
     <style name="HackerTheme.Button">
         <item name="android:background">@drawable/console_button_drawable</item>
         <item name="android:textColor">@color/green</item>
         <item name="android:padding">@dimen/button_padding</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

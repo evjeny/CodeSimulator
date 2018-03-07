@@ -20,7 +20,10 @@
         <activity android:name=".view.LevelCreator" />
         <activity android:name=".view.LevelReader" />
         <activity android:name=".view.NotebookActivity" />
-
+        <activity
+            android:name=".view.NotebookViewerActivity"
+            android:label="@string/title_activity_notebook_viewer"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
