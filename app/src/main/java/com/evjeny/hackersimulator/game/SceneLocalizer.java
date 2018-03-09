@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -31,7 +32,7 @@ class SceneLocalizer {
     private final static String sceneTag = "scene",
     actTag = "act", contentTag = "content", contentItemTag = "ci",
     barTag = "bar", buttonTag = "button", nameTag = "name", actionTag = "action",
-    typeTag = "type";
+    typeTag = "type", textTag = "textEmb";
     private final static String textType = "text", imageType = "image", codeType = "code";
 
     SceneLocalizer(Context context, GameType type) {
@@ -54,6 +55,9 @@ class SceneLocalizer {
 
         ArrayList<Object> contents = null;
         Content content = null;
+
+        Bitmap bitmap = null;
+        ArrayList<IText> texts = null;
 
         Bar bar = null;
         ArrayList<Button> buttons = null;
@@ -98,7 +102,9 @@ class SceneLocalizer {
                                 contents.add(getValFromText(parser.nextText()));
                                 break;
                             case IMAGE:
-                                contents.add(getImageFromText(parser.nextText()));
+                                texts = new ArrayList<>();
+                                bitmap = getImageFromText(parser.getAttributeValue(null,
+                                        "src"));
                                 break;
                             case CODE:
                                 String codeType = parser.getAttributeValue(null, typeTag);
@@ -116,6 +122,13 @@ class SceneLocalizer {
                                 contents.add(getValFromText(parser.nextText()));
                                 break;
                         }
+                        break;
+                    case textTag:
+                        texts.add(new IText(parser.getAttributeValue(null, "text"),
+                                Color.parseColor(parser.getAttributeValue(null, "color")),
+                                Float.valueOf(parser.getAttributeValue(null, "x")),
+                                Float.valueOf(parser.getAttributeValue(null, "y")),
+                                Float.valueOf(parser.getAttributeValue(null, "textSize"))));
                         break;
                     case barTag:
                         buttons = new ArrayList<>();
@@ -138,6 +151,10 @@ class SceneLocalizer {
                 String name = parser.getName();
                 ArrayList<String> messages = new ArrayList<>();
                 switch (name) {
+                    case contentItemTag:
+                        if (actType == ActType.IMAGE) {
+                            contents.add(new Image(bitmap, texts));
+                        }
                     case contentTag:
                         switch (actType) {
                             case STORY:
@@ -145,8 +162,8 @@ class SceneLocalizer {
                                 content = new StoryContent(messages);
                                 break;
                             case IMAGE:
-                                ArrayList<Bitmap> images = new ArrayList<>();
-                                for (Object con : contents) images.add((Bitmap) con);
+                                ArrayList<Image> images = new ArrayList<>();
+                                for (Object con : contents) images.add((Image) con);
                                 content = new ImageContent(images);
                                 break;
                             case CODE:

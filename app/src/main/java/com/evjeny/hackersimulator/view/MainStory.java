@@ -1,8 +1,8 @@
 package com.evjeny.hackersimulator.view;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -18,7 +18,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainStory extends FragmentActivity {
+public class MainStory extends AppCompatActivity {
 
     private GameSave save;
     public GameSaver saver;
@@ -57,9 +57,19 @@ public class MainStory extends FragmentActivity {
             public void onPointerChanged() {
                 try {
                     Scene current = storyline.get(pointer);
-                    generator.generateSceneAuto(current, new SceneGenerator.storyInterface() {
+                    generator.generateScene(current, new SceneGenerator.storyInterface() {
                         @Override
-                        public void nextAct() {
+                        public void actStart() {
+
+                        }
+
+                        @Override
+                        public void nextContent() {
+
+                        }
+
+                        @Override
+                        public void actEnd() {
 
                         }
 
@@ -70,11 +80,11 @@ public class MainStory extends FragmentActivity {
 
                         @Override
                         public void check(ArrayList<String> code) {
-                            //checking code here
+
                         }
 
                         @Override
-                        public void end() {
+                        public void sceneEnd() {
                             pointer++;
                             pointerChangedInterface.onPointerChanged();
                         }

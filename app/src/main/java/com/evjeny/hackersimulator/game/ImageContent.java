@@ -10,17 +10,17 @@ import java.util.List;
  */
 
 public class ImageContent extends Content {
-    public ImageContent(List<Bitmap> images) {
+    public ImageContent(List<Image> images) {
         super(new ArrayList<Object>(images));
     }
 
-    public ArrayList<Bitmap> getImages() {
-        ArrayList<Bitmap> images = new ArrayList<>();
-        for (Object obj : this.contents) images.add((Bitmap) obj);
+    public ArrayList<Image> getImages() {
+        ArrayList<Image> images = new ArrayList<>();
+        for (Object obj : this.contents) images.add((Image) obj);
         return images;
     }
 
-    public Bitmap getImage(int index) {
-        return (Bitmap) this.contents.get(index);
+    public Image getImage(int index) {
+        return (Image) this.contents.get(index);
     }
 }

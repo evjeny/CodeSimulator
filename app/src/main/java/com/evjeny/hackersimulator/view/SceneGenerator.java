@@ -4,11 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +35,9 @@ public class SceneGenerator {
 
     private Bundle args;
 
+    private actPointerInterface actPointerInterface = null;
+    private int actPointer = 0;
+
     SceneGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
                    ViewGroup buttonHolder, GameType type) {
         this.context = context;
@@ -45,17 +46,28 @@ public class SceneGenerator {
         this.buttonHolder = buttonHolder;
         this.args = new Bundle();
         int style = type == GameType.proger ? R.style.ProgerTheme : R.style.HackerTheme;
-        Log.d("SceneGenerator", "GameType: " + type.text + ", style_int: " + style);
         this.args.putInt("style", style);
     }
 
     public void generateScene(final Scene scene, final storyInterface intf) {
-        for (Act act: scene.acts) {
-            generateActAuto(act, intf);
-        }
+        final ArrayList<Act> acts = scene.acts;
+        actPointer = 0;
+        actPointerInterface = new actPointerInterface() {
+            @Override
+            public void nextAct() {
+                if (actPointer < acts.size()) {
+                    Act current = acts.get(actPointer);
+                    generateActAuto(current, intf);
+                } else {
+                    intf.sceneEnd();
+                }
+            }
+        };
+        actPointerInterface.nextAct();
     }
 
-    public void generateActAuto(final Act act, final storyInterface intf) {
+    private void generateActAuto(final Act act, final storyInterface intf) {
+        intf.actStart();
         switch (act.type) {
             case STORY:
                 generateStoryAct(act, intf);
@@ -101,11 +113,14 @@ public class SceneGenerator {
                             if (button.action.equals("next")) {
                                 pointer[0]++;
                                 if (pointer[0] < content.getMessages().size()) {
-                                    intf.nextAct();
+                                    intf.nextContent();
+
                                     mf_tv.setText(HtmlCompat.fromHtml(context, content.getMessage(pointer[0]),
                                             HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
-                                } else
-                                    intf.end();
+                                } else {
+                                    intf.actEnd();
+                                    sendNextAct();
+                                }
                             } else if (button.action.equals("stop")) {
                                 intf.stop();
                             }
@@ -126,11 +141,11 @@ public class SceneGenerator {
         transaction.runOnCommit(new Runnable() {
             @Override
             public void run() {
-                final ImageView imageView =
+                final TImageView imageView =
                         imageFragment.getView().findViewById(R.id.image_fragment_imageview);
                 final ImageContent content = (ImageContent) act.content;
                 final int[] pointer = {0};
-                imageView.setImageBitmap(content.getImage(pointer[0]));
+                imageView.generateImage(content.getImage(pointer[0]));
                 Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
@@ -147,10 +162,13 @@ public class SceneGenerator {
                             if (button.action.equals("next")) {
                                 pointer[0]++;
                                 if (pointer[0] < content.getImages().size()) {
-                                    intf.nextAct();
-                                    imageView.setImageBitmap(content.getImage(pointer[0]));
-                                } else
-                                    intf.end();
+                                    intf.nextContent();
+
+                                    imageView.generateImage(content.getImage(pointer[0]));
+                                } else {
+                                    intf.actEnd();
+                                    sendNextAct();
+                                }
                             } else if (button.action.equals("stop")) {
                                 intf.stop();
                             }
@@ -209,7 +227,8 @@ public class SceneGenerator {
                                 ArrayList<String> res = new ArrayList<>();
                                 for (TextView v : parts) res.add(v.getText().toString());
                                 intf.check(res);
-                                intf.end();
+                                intf.actEnd();
+                                sendNextAct();
                             } else if (button.action.equals("stop")) {
                                 intf.stop();
                             }
@@ -222,15 +241,27 @@ public class SceneGenerator {
         transaction.commit();
     }
 
+    private void sendNextAct() {
+        actPointer++;
+        actPointerInterface.nextAct();
+    }
+
     public interface storyInterface {
+
+        void actStart();
+
         void nextContent();
 
-        void nextAct();
+        void actEnd();
 
         void stop();
 
         void check(ArrayList<String> code);
 
-        void end();
+        void sceneEnd();
+    }
+
+    private interface actPointerInterface {
+        void nextAct();
     }
 }
