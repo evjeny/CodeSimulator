@@ -24,13 +24,12 @@ import java.util.ArrayList;
 public class NotebookActivity extends AppCompatActivity {
 
     private FileLocalizer localizer;
-    private ListView lv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook);
-        lv = findViewById(R.id.activity_notebook_lv);
+        ListView lv = findViewById(R.id.activity_notebook_lv);
 
         localizer = new FileLocalizer(this);
         try {

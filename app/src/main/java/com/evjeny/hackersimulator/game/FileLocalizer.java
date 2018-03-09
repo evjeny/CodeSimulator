@@ -27,12 +27,12 @@ public class FileLocalizer {
     public String translate(String name) throws IOException {
         InputStream stream = manager.open(name);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        String content = "";
+        StringBuilder content = new StringBuilder();
         String cur;
         while ((cur = reader.readLine()) != null) {
-            content += cur + '\n';
+            content.append(cur).append('\n');
         }
-        return replaceResourceStrings(context, content);
+        return replaceResourceStrings(context, content.toString());
     }
 
     public String getString(String name) {

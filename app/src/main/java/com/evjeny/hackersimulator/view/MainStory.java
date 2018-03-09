@@ -26,8 +26,6 @@ public class MainStory extends AppCompatActivity {
     private SceneGenerator generator;
     private pcInterface pointerChangedInterface;
 
-    private LinearLayout main_fragment, main_bar;
-
     private int pointer;
 
     @Override
@@ -35,8 +33,8 @@ public class MainStory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_story);
 
-        main_fragment = findViewById(R.id.main_story_fragment);
-        main_bar = findViewById(R.id.main_story_bar);
+        LinearLayout main_fragment = findViewById(R.id.main_story_fragment);
+        LinearLayout main_bar = findViewById(R.id.main_story_bar);
 
         save = (GameSave) getIntent().getSerializableExtra("save");
         saver = new GameSaver(this);

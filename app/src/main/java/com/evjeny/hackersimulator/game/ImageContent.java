@@ -1,7 +1,5 @@
 package com.evjeny.hackersimulator.game;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +8,7 @@ import java.util.List;
  */
 
 public class ImageContent extends Content {
-    public ImageContent(List<Image> images) {
+    ImageContent(List<Image> images) {
         super(new ArrayList<Object>(images));
     }
 

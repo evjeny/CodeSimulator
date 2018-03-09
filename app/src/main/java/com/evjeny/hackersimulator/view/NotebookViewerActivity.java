@@ -12,20 +12,16 @@ import java.io.IOException;
 
 public class NotebookViewerActivity extends AppCompatActivity {
 
-    private FileLocalizer localizer;
-
-    private WebView wv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        wv = new WebView(this);
+        WebView wv = new WebView(this);
         WebSettings settings = wv.getSettings();
         settings.setDefaultTextEncodingName("utf-8");
         setContentView(wv);
 
         NoteItem item = (NoteItem) getIntent().getSerializableExtra("noteItem");
-        localizer = new FileLocalizer(this);
+        FileLocalizer localizer = new FileLocalizer(this);
 
         String text = "Error!";
         try {

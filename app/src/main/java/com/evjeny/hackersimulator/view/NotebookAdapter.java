@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NotebookAdapter extends ArrayAdapter<NoteItem> {
 
-    public NotebookAdapter(@NonNull Context context, @NonNull List<NoteItem> objects) {
+    NotebookAdapter(@NonNull Context context, @NonNull List<NoteItem> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
     }
 
@@ -31,6 +31,7 @@ public class NotebookAdapter extends ArrayAdapter<NoteItem> {
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1,
                     null);
         TextView tv = convertView.findViewById(android.R.id.text1);
+        assert item != null;
         tv.setText(item.label);
         return convertView;
     }

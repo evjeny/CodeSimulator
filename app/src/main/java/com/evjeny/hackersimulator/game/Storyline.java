@@ -13,13 +13,11 @@ import java.io.IOException;
 
 public class Storyline {
 
-    private Context context;
     private SceneLocalizer localizer;
 
     private int size;
 
     public Storyline(Context context, GameType type) throws IOException {
-        this.context = context;
         this.localizer = new SceneLocalizer(context, type);
         this.size = context.getAssets().list(type.text + File.separator + "scenes").length;
     }

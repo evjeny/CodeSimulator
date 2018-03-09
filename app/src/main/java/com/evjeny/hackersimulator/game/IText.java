@@ -12,7 +12,7 @@ public class IText implements Serializable {
     public int color;
     public float posX, posY, textSize;
 
-    public IText(String text, int color, float posX, float posY, float textSize) {
+    IText(String text, int color, float posX, float posY, float textSize) {
         this.text = text;
         this.color = color;
         this.posX = posX;

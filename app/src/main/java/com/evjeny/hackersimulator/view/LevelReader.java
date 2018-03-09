@@ -25,13 +25,11 @@ public class LevelReader extends AppCompatActivity {
 
     private GameSaver saver;
 
-    private ListView levels;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_reader);
-        levels = findViewById(R.id.level_reader_lv);
+        ListView levels = findViewById(R.id.level_reader_lv);
 
         saver = new GameSaver(this);
 

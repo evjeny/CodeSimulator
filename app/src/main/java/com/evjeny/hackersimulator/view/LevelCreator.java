@@ -27,7 +27,6 @@ public class LevelCreator extends AppCompatActivity {
     private GameSaver saver;
 
     private EditText level_name, player_name;
-    private Spinner type;
 
     private String[] data = {"hacker",
             "proger"};
@@ -39,11 +38,11 @@ public class LevelCreator extends AppCompatActivity {
         setContentView(R.layout.level_creator);
         level_name = findViewById(R.id.l_creator_world_name);
         player_name = findViewById(R.id.l_creator_player_name);
-        type = findViewById(R.id.l_creator_world_type);
+        Spinner type = findViewById(R.id.l_creator_world_type);
 
         saver = new GameSaver(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, data);
         type.setAdapter(adapter);
         type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

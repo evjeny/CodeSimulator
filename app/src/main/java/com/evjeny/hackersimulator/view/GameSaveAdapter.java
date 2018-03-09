@@ -18,13 +18,11 @@ import java.util.ArrayList;
 
 public class GameSaveAdapter extends BaseAdapter {
 
-    private Context context;
     private LayoutInflater inflater;
 
     private ArrayList<GameSave> objects;
 
-    public GameSaveAdapter(Context context, ArrayList<GameSave> saves) {
-        this.context = context;
+    GameSaveAdapter(Context context, ArrayList<GameSave> saves) {
         this.objects = saves;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -44,11 +42,11 @@ public class GameSaveAdapter extends BaseAdapter {
         return i;
     }
 
-    public GameSave getGameSave(int i) {
+    GameSave getGameSave(int i) {
         return objects.get(i);
     }
 
-    public void remove(int index) {
+    void remove(int index) {
         objects.remove(index);
         this.notifyDataSetChanged();
     }

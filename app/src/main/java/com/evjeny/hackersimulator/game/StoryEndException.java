@@ -5,7 +5,7 @@ package com.evjeny.hackersimulator.game;
  */
 
 public class StoryEndException extends Throwable {
-    public StoryEndException() {
+    StoryEndException() {
         super("Story ended!");
     }
 

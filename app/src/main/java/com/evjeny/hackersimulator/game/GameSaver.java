@@ -19,15 +19,13 @@ import java.util.ArrayList;
 
 public class GameSaver {
 
-    private Context context;
     private final File savesDir;
 
-    public static final String path = "saves";
-    public static final String hacker_ext = ".hack";
-    public static final String proger_ext = ".prog";
+    private static final String path = "saves";
+    private static final String hacker_ext = ".hack";
+    private static final String proger_ext = ".prog";
 
     public GameSaver(Context context) {
-        this.context = context;
         savesDir = context.getDir(path, Context.MODE_PRIVATE);
     }
 
@@ -51,7 +49,7 @@ public class GameSaver {
         return getLevel(shorto.getWorldName(), shorto.getGameType());
     }
 
-    public GameSave getLevel(String worldName, GameType gameType) throws IOException {
+    private GameSave getLevel(String worldName, GameType gameType) throws IOException {
         File saveFile = new File(savesDir, worldName + getExtension(gameType));
         FileInputStream fis = new FileInputStream(saveFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
@@ -62,8 +60,8 @@ public class GameSaver {
         return new GameSave(worldName, playerName, gameType, currentScene);
     }
 
-    public GameSave writeLevel(GameSave save) throws IOException {
-        return writeLevel(save.getWorldName(), save.getPlayerName(), save.getGameType(),
+    public void writeLevel(GameSave save) throws IOException {
+        writeLevel(save.getWorldName(), save.getPlayerName(), save.getGameType(),
                 save.getCurrentScene());
     }
 
@@ -81,13 +79,13 @@ public class GameSaver {
         return new GameSave(worldName, playerName, gameType, currentScene);
     }
 
-    public boolean removeLevel(GameSave gameSave) {
-        return removeLevel(gameSave.getWorldName(), gameSave.getGameType());
+    public void removeLevel(GameSave gameSave) {
+        removeLevel(gameSave.getWorldName(), gameSave.getGameType());
     }
 
-    public boolean removeLevel(String worldName, GameType gameType) {
+    private void removeLevel(String worldName, GameType gameType) {
         File saveFile = new File(savesDir, worldName + getExtension(gameType));
-        return saveFile.delete();
+        saveFile.delete();
     }
 
     private String getExtension(GameType type) {

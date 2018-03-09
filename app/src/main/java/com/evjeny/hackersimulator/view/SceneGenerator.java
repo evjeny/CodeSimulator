@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Created by evjeny on 21.01.2018 10:08 6:41.
  */
 
-public class SceneGenerator {
+class SceneGenerator {
     private Context context;
     private FragmentManager manager;
     private ViewGroup fragmentHolder, buttonHolder;
@@ -49,7 +49,7 @@ public class SceneGenerator {
         this.args.putInt("style", style);
     }
 
-    public void generateScene(final Scene scene, final storyInterface intf) {
+    void generateScene(final Scene scene, final storyInterface intf) {
         final ArrayList<Act> acts = scene.acts;
         actPointer = 0;
         actPointerInterface = new actPointerInterface() {

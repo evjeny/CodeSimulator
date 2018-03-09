@@ -9,12 +9,12 @@ import java.util.List;
 
 public class StoryContent extends Content {
 
-    public StoryContent(List<String> messages) {
+    StoryContent(List<String> messages) {
         super(new ArrayList<Object>(messages));
     }
 
     public List<String> getMessages() {
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
         for (Object obj : this.contents) messages.add(obj != null ? obj.toString() : "");
         return messages;
     }

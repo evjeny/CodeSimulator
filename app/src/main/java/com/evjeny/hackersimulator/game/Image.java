@@ -12,7 +12,7 @@ public class Image {
     public Bitmap bitmap;
     public ArrayList<IText> texts;
 
-    public Image(Bitmap bitmap, ArrayList<IText> texts) {
+    Image(Bitmap bitmap, ArrayList<IText> texts) {
         this.bitmap = bitmap;
         this.texts = texts;
     }
