@@ -1,4 +1,4 @@
-package com.evjeny.hackersimulator.game;
+package com.evjeny.hackersimulator.model;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -7,10 +7,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
+import com.evjeny.hackersimulator.game.Act;
+import com.evjeny.hackersimulator.game.ActType;
+import com.evjeny.hackersimulator.game.Bar;
+import com.evjeny.hackersimulator.game.Button;
+import com.evjeny.hackersimulator.game.CodeContent;
+import com.evjeny.hackersimulator.game.CodePart;
+import com.evjeny.hackersimulator.game.Content;
+import com.evjeny.hackersimulator.game.GameType;
+import com.evjeny.hackersimulator.game.IText;
+import com.evjeny.hackersimulator.game.Image;
+import com.evjeny.hackersimulator.game.ImageContent;
+import com.evjeny.hackersimulator.game.Scene;
+import com.evjeny.hackersimulator.game.StoryContent;
+import com.evjeny.hackersimulator.game.TextButton;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +38,7 @@ import java.util.regex.Pattern;
  * Created by evjeny on 20.01.2018 16:44 6:44.
  */
 
-class SceneLocalizer {
+public class SceneLocalizer {
 
     private Context context;
     private AssetManager manager;
@@ -32,16 +49,17 @@ class SceneLocalizer {
     private final static String sceneTag = "scene",
     actTag = "act", contentTag = "content", contentItemTag = "ci",
     barTag = "bar", buttonTag = "button", nameTag = "name", actionTag = "action",
-    typeTag = "type", textTag = "textEmb";
+    typeTag = "type", textTag = "text", colorTag = "color", xTag = "x", yTag = "y",
+    textSizeTag = "textSize";
     private final static String textType = "text", imageType = "image", codeType = "code";
 
-    SceneLocalizer(Context context, GameType type) {
+    public SceneLocalizer(Context context, GameType type) {
         this.context = context;
         this.manager = context.getAssets();
         this.type_prefix = type.text;
     }
 
-    Scene get(int num) throws IOException, XmlPullParserException {
+    public Scene get(int num) throws IOException, XmlPullParserException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         XmlPullParser parser = factory.newPullParser();
         InputStream raw = manager.open(type_prefix + "/scenes/" + num + ".xml");
@@ -107,16 +125,7 @@ class SceneLocalizer {
                                         "src"));
                                 break;
                             case CODE:
-                                String codeType = parser.getAttributeValue(null, typeTag);
-                                CodePart codePart = null;
-                                if (codeType.equals(codeType)) { // FIXME: 07.03.2018
-                                    codePart = new CodePart(CodePart.Type.WRITABLE,
-                                            replaceResourceStrings(parser.nextText()));
-                                } else if (codeType.equals(textType)) {
-                                    codePart = new CodePart(CodePart.Type.TEXT,
-                                            replaceResourceStrings(parser.nextText()));
-                                }
-                                contents.add(codePart);
+                                content = parseCodeContent(parser.nextText());
                                 break;
                             default:
                                 contents.add(getValFromText(parser.nextText()));
@@ -124,11 +133,25 @@ class SceneLocalizer {
                         }
                         break;
                     case textTag:
-                        texts.add(new IText(parser.getAttributeValue(null, "text"),
-                                Color.parseColor(parser.getAttributeValue(null, "color")),
-                                Float.valueOf(parser.getAttributeValue(null, "x")),
-                                Float.valueOf(parser.getAttributeValue(null, "y")),
-                                Float.valueOf(parser.getAttributeValue(null, "textSize"))));
+                        String text = "hello";
+                        int color = Color.parseColor("#000000");
+                        float x = 50;
+                        float y = 50;
+                        float textSize = 20;
+                        for (int i = 0; i < parser.getAttributeCount(); i++) {
+                            if (parser.getAttributeName(i).equals(textTag)) {
+                                text = parser.getAttributeValue(i);
+                            } else if (parser.getAttributeName(i).equals(colorTag)) {
+                                color = Color.parseColor(parser.getAttributeValue(i));
+                            } else if (parser.getAttributeName(i).equals(textSizeTag)) {
+                                textSize = Float.valueOf(parser.getAttributeValue(i));
+                            } else if (parser.getAttributeName(i).equals(xTag)) {
+                                x = Float.parseFloat(parser.getAttributeValue(i));
+                            } else if (parser.getAttributeName(i).equals(yTag)) {
+                                y = Float.parseFloat(parser.getAttributeValue(i));
+                            }
+                        }
+                        texts.add(new IText(text, color, x, y, textSize));
                         break;
                     case barTag:
                         buttons = new ArrayList<>();
@@ -167,9 +190,7 @@ class SceneLocalizer {
                                 content = new ImageContent(images);
                                 break;
                             case CODE:
-                                ArrayList<CodePart> parts = new ArrayList<>();
-                                for (Object con : contents) parts.add((CodePart) con);
-                                content = new CodeContent(parts);
+                                // do nothing, 'cause content has been already parsed
                                 break;
                             default:
                                 for (Object con : contents) messages.add(con.toString());
@@ -204,6 +225,38 @@ class SceneLocalizer {
             eventType = parser.next();
         }
         return result;
+    }
+
+    private CodeContent parseCodeContent(String name) throws XmlPullParserException, IOException {
+        File mainDir = new File(context.getFilesDir(), "tasks");
+        File currentTask = new File(mainDir, name);
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(new FileReader(currentTask));
+
+        int eventType = parser.getEventType();
+
+        String text = null;
+        long id = 0;
+
+        while (eventType != XmlResourceParser.END_DOCUMENT) {
+            if (eventType == XmlResourceParser.START_TAG) {
+                switch (parser.getName()) {
+                    case "text":
+                        text = parser.nextText();
+                        break;
+                    case "id":
+                        id = Long.parseLong(parser.nextText());
+                        break;
+                }
+            }
+        }
+        ArrayList<CodePart> parts = new ArrayList<>();
+        parts.add(new CodePart(CodePart.Type.READABLE, text));
+        parts.add(new CodePart(CodePart.Type.WRITABLE, ""));
+
+        return new CodeContent(parts, id);
     }
 
     private String getValFromText(String text) {

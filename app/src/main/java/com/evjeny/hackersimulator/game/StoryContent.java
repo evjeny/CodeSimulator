@@ -9,7 +9,7 @@ import java.util.List;
 
 public class StoryContent extends Content {
 
-    StoryContent(List<String> messages) {
+    public StoryContent(List<String> messages) {
         super(new ArrayList<Object>(messages));
     }
 

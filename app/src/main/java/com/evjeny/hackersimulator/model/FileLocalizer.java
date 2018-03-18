@@ -1,4 +1,4 @@
-package com.evjeny.hackersimulator.game;
+package com.evjeny.hackersimulator.model;
 
 import android.content.Context;
 import android.content.res.AssetManager;

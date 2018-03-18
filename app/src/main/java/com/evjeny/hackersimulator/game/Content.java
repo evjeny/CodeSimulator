@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Evjeny on 19.01.2018 6:11.
  */
 
-class Content {
+public class Content {
 
     final List<Object> contents;
 

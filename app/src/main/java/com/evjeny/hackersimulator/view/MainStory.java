@@ -8,20 +8,23 @@ import android.widget.Toast;
 
 import com.evjeny.hackersimulator.R;
 import com.evjeny.hackersimulator.game.GameSave;
-import com.evjeny.hackersimulator.game.GameSaver;
 import com.evjeny.hackersimulator.game.Scene;
 import com.evjeny.hackersimulator.game.StoryEndException;
 import com.evjeny.hackersimulator.game.Storyline;
+import com.evjeny.hackersimulator.model.GameSaver;
+import com.evjeny.hackersimulator.model.TaskSender;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainStory extends AppCompatActivity {
 
+    private GameSaver saver;
+    private TaskSender sender;
     private GameSave save;
-    public GameSaver saver;
     private Storyline storyline;
     private SceneGenerator generator;
     private pcInterface pointerChangedInterface;
@@ -38,6 +41,7 @@ public class MainStory extends AppCompatActivity {
 
         save = (GameSave) getIntent().getSerializableExtra("save");
         saver = new GameSaver(this);
+        sender = new TaskSender(this);
 
         try {
             storyline = new Storyline(this, save.getGameType());
@@ -77,8 +81,18 @@ public class MainStory extends AppCompatActivity {
                         }
 
                         @Override
-                        public void check(ArrayList<String> code) {
-
+                        public void check(String code, long id) {
+                            try {
+                                sender.sendRequest(code, id, new TaskSender.ResultInterface() {
+                                    @Override
+                                    public void result(JSONObject res) {
+                                        Toast.makeText(MainStory.this,
+                                                res.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override

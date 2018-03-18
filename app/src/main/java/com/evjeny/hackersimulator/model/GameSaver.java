@@ -1,7 +1,10 @@
-package com.evjeny.hackersimulator.game;
+package com.evjeny.hackersimulator.model;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.evjeny.hackersimulator.game.GameSave;
+import com.evjeny.hackersimulator.game.GameType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

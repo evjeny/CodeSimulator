@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class ImageContent extends Content {
-    ImageContent(List<Image> images) {
+    public ImageContent(List<Image> images) {
         super(new ArrayList<Object>(images));
     }
 

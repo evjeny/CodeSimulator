@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.evjeny.hackersimulator.R;
 import com.evjeny.hackersimulator.game.GameSave;
-import com.evjeny.hackersimulator.game.GameSaver;
+import com.evjeny.hackersimulator.model.GameSaver;
 import com.evjeny.hackersimulator.game.GameType;
 
 import java.io.IOException;

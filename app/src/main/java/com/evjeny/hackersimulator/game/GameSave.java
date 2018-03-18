@@ -13,12 +13,12 @@ public class GameSave implements Serializable {
     private String playerName;
     private int currentScene;
 
-    GameSave(String worldName, GameType gameType) {
+    public GameSave(String worldName, GameType gameType) {
         this.worldName = worldName;
         this.gameType = gameType;
     }
 
-    GameSave(String worldName, String playerName, GameType gameType, int currentScene) {
+    public GameSave(String worldName, String playerName, GameType gameType, int currentScene) {
         this.worldName = worldName;
         this.playerName = playerName;
         this.gameType = gameType;
@@ -30,7 +30,7 @@ public class GameSave implements Serializable {
         return worldName;
     }
 
-    String getPlayerName() {
+    public String getPlayerName() {
         return playerName;
     }
 

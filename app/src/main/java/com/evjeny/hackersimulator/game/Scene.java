@@ -10,7 +10,7 @@ public class Scene {
 
     public final ArrayList<Act> acts;
 
-    Scene(ArrayList<Act> acts) {
+    public Scene(ArrayList<Act> acts) {
         this.acts = acts;
     }
 

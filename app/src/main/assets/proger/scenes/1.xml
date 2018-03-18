@@ -2,12 +2,10 @@
 <scene>
     <act type="image">
         <content>
-            <ci src="s1a1p1.png">
-                <textEmb text="hello world!" color="#000000" x="20" y="20" textSize="20" />
-            </ci>
-            <ci src="s1a1p2.png"></ci>
-            <ci src="s1a1p3.png"></ci>
-            <ci src="s1a1p4.png"></ci>
+            <ci src="s1a1p1.png" />
+            <ci src="s1a1p2.png" />
+            <ci src="s1a1p3.png" />
+            <ci src="s1a1p4.png" />
         </content>
         <bar>
             <button type="text">
@@ -32,7 +30,7 @@
     </act>
     <act type="image">
         <content>
-            <ci src="s1a1p5.png"></ci>
+            <ci src="s1a3p1.png" />
         </content>
         <bar>
             <button type="text">
@@ -54,7 +52,7 @@
     </act>
     <act type="image">
         <content>
-            <ci src="s1a1p6.png"></ci>
+            <ci src="s1a5p1.png" />
         </content>
         <bar>
             <button type="text">

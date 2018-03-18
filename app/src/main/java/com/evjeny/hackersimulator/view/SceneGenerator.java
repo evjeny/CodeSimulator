@@ -194,10 +194,11 @@ class SceneGenerator {
                 final CodeContent content = (CodeContent) act.content;
                 final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
                 final ArrayList<TextView> parts = new ArrayList<>();
 
                 for (CodePart codePart : content.getFragments()) {
-                    if (codePart.type == CodePart.Type.TEXT) {
+                    if (codePart.type == CodePart.Type.READABLE) {
                         TextView textView = new TextView(context);
                         textView.setText(codePart.value);
                         textView.setLayoutParams(params);
@@ -224,11 +225,9 @@ class SceneGenerator {
                         @Override
                         public void onClick(View view) {
                             if (button.action.equals("check")) {
-                                ArrayList<String> res = new ArrayList<>();
-                                for (TextView v : parts) res.add(v.getText().toString());
-                                intf.check(res);
-                                intf.actEnd();
-                                sendNextAct();
+                                intf.check(parts.get(1).getText().toString(), content.id);
+                                //intf.actEnd();
+                                //sendNextAct();
                             } else if (button.action.equals("stop")) {
                                 intf.stop();
                             }
@@ -241,7 +240,7 @@ class SceneGenerator {
         transaction.commit();
     }
 
-    private void sendNextAct() {
+    public void sendNextAct() {
         actPointer++;
         actPointerInterface.nextAct();
     }
@@ -256,7 +255,7 @@ class SceneGenerator {
 
         void stop();
 
-        void check(ArrayList<String> code);
+        void check(String code, long id);
 
         void sceneEnd();
     }

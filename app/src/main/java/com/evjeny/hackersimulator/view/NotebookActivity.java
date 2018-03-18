@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.evjeny.hackersimulator.R;
-import com.evjeny.hackersimulator.game.FileLocalizer;
+import com.evjeny.hackersimulator.model.FileLocalizer;
 import com.evjeny.hackersimulator.game.NoteItem;
 
 import java.io.IOException;

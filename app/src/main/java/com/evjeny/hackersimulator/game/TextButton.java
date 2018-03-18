@@ -8,7 +8,7 @@ public class TextButton extends Button {
 
     public String name;
 
-    TextButton(String name, String action) {
+    public TextButton(String name, String action) {
         super(name, action);
         this.name = name;
     }

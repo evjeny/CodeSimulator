@@ -8,7 +8,7 @@ import java.util.List;
 public class Bar {
     public final List<Button> buttons;
 
-    Bar(List<Button> buttons) {
+    public Bar(List<Button> buttons) {
         this.buttons = buttons;
     }
 }

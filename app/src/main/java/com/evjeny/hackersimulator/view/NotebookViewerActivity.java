@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.evjeny.hackersimulator.game.FileLocalizer;
+import com.evjeny.hackersimulator.model.FileLocalizer;
 import com.evjeny.hackersimulator.game.NoteItem;
 
 import java.io.IOException;

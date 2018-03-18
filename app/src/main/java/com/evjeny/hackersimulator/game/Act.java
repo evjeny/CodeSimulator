@@ -9,7 +9,7 @@ public class Act {
     public final Content content;
     public final Bar bar;
 
-    Act(ActType type, Content content, Bar bar) {
+    public Act(ActType type, Content content, Bar bar) {
         this.type = type;
         this.content = content;
         this.bar = bar;

@@ -5,16 +5,17 @@ package com.evjeny.hackersimulator.game;
  */
 
 public class CodePart {
+    public long id;
     public final Type type;
     public final String value;
 
-    CodePart(Type type, String value) {
+    public CodePart(Type type, String value) {
         this.type = type;
         this.value = value;
     }
 
     public enum Type {
-        TEXT,
+        READABLE,
         WRITABLE
     }
 }

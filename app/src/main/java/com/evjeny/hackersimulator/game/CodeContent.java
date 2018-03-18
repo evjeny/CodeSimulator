@@ -9,7 +9,9 @@ import java.util.List;
 
 public class CodeContent extends Content{
 
-    public CodeContent(List<CodePart> fragments) {
+    public long id;
+
+    public CodeContent(List<CodePart> fragments, long id) {
         super(new ArrayList<Object>(fragments));
     }
 

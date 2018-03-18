@@ -2,6 +2,8 @@ package com.evjeny.hackersimulator.game;
 
 import android.content.Context;
 
+import com.evjeny.hackersimulator.model.SceneLocalizer;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
