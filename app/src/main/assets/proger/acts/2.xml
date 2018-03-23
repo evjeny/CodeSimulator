@@ -1,0 +1,14 @@
+<act type="text">
+    <content>
+        <ci>Окей, меня зовут @username.</ci>
+        <ci>Я начинающий программист, и мне нужно найти работу.</ci>
+        <ci>Все, что я делал до этого - писал одностраничные сайты.</ci>
+        <ci>Поэтому я решил изучить Питон и работать в каком-нибудь номальном проекте.</ci>
+    </content>
+    <bar>
+        <button type="text">
+            <name>@string/next</name>
+            <action>nextAct_3.xml</action>
+        </button>
+    </bar>
+</act>

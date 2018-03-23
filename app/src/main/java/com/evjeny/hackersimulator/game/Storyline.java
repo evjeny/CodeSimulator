@@ -2,11 +2,10 @@ package com.evjeny.hackersimulator.game;
 
 import android.content.Context;
 
-import com.evjeny.hackersimulator.model.SceneLocalizer;
+import com.evjeny.hackersimulator.model.ActLocalizer;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -15,25 +14,19 @@ import java.io.IOException;
 
 public class Storyline {
 
-    private SceneLocalizer localizer;
-
-    private int size;
+    private ActLocalizer localizer;
 
     public Storyline(Context context, GameType type) throws IOException {
-        this.localizer = new SceneLocalizer(context, type);
-        this.size = context.getAssets().list(type.text + File.separator + "scenes").length;
+        this.localizer = new ActLocalizer(context, type);
     }
 
-    public Scene get(int pos) throws StoryEndException, IOException, XmlPullParserException {
-        if (pos <= size) {
-            try {
-                return localizer.get(pos);
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-            }
+    public Act get(String actName) throws NoActException, IOException, XmlPullParserException {
+        try {
+            return localizer.get(actName);
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+            throw new NoActException();
         }
-        else throw new StoryEndException();
-        return null;
     }
 
 }

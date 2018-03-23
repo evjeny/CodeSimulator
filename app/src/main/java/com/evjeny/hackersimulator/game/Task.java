@@ -16,10 +16,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<task>\n" +
-                "\t<text>" + text + "</text>\n" +
-                "\t<id>" + id + "</id>\n" +
-                "</task>";
+        return "{\"task\":{\"id\":" + id + ",\"text\":\"" + text + "\"}}";
     }
 }

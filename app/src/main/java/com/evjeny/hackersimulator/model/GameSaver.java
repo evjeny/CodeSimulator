@@ -48,8 +48,8 @@ public class GameSaver {
         return res;
     }
 
-    public GameSave getLevel(GameSave shorto) throws IOException {
-        return getLevel(shorto.getWorldName(), shorto.getGameType());
+    public GameSave getLevel(GameSave shortSave) throws IOException {
+        return getLevel(shortSave.getWorldName(), shortSave.getGameType());
     }
 
     private GameSave getLevel(String worldName, GameType gameType) throws IOException {
@@ -58,18 +58,18 @@ public class GameSaver {
         BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
         worldName = reader.readLine();
         String playerName = reader.readLine();
-        int currentScene = Integer.valueOf(reader.readLine());
+        String currentAct = reader.readLine();
         reader.close();
-        return new GameSave(worldName, playerName, gameType, currentScene);
+        return new GameSave(worldName, playerName, gameType, currentAct);
     }
 
     public void writeLevel(GameSave save) throws IOException {
         writeLevel(save.getWorldName(), save.getPlayerName(), save.getGameType(),
-                save.getCurrentScene());
+                save.getCurrentAct());
     }
 
     public GameSave writeLevel(String worldName, String playerName,
-                               GameType gameType, int currentScene) throws IOException {
+                               GameType gameType, String currentAct) throws IOException {
         File saveFile = new File(savesDir, worldName + getExtension(gameType));
         FileOutputStream fos = new FileOutputStream(saveFile);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
@@ -77,16 +77,16 @@ public class GameSaver {
         writer.newLine();
         writer.write(playerName);
         writer.newLine();
-        writer.write(String.valueOf(currentScene));
+        writer.write(currentAct);
         writer.close();
-        return new GameSave(worldName, playerName, gameType, currentScene);
+        return new GameSave(worldName, playerName, gameType, currentAct);
     }
 
     public void removeLevel(GameSave gameSave) {
         removeLevel(gameSave.getWorldName(), gameSave.getGameType());
     }
 
-    private void removeLevel(String worldName, GameType gameType) {
+    public void removeLevel(String worldName, GameType gameType) {
         File saveFile = new File(savesDir, worldName + getExtension(gameType));
         saveFile.delete();
     }

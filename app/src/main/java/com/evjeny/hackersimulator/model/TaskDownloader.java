@@ -15,11 +15,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -33,8 +34,9 @@ public class TaskDownloader {
 
     private File mainDir;
     private File mainFile;
+    private File hashFile;
 
-    private final String hashTag = "hash", tasksTag = "tasks", taskTag = "task", textTag = "text";
+    private final String hashTag = "hash";
     private final String hashUrl = "http://silvertests.ru/XML/GetQuestionsHashPython.ashx";
     private final String tasksUrl = "http://silvertests.ru/XML/GetQuestionsPython.ashx";
 
@@ -45,15 +47,17 @@ public class TaskDownloader {
 
         mainFile = new File(mainDir, "main.xml");
 
+        hashFile = new File(mainDir, "hash.xml");
+
         queue = QueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
 
         StringRequest hashRequest = new StringRequest(Request.Method.GET, hashUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        response = response.trim();
                         try {
                             if (need2dl(response)) {
+                                writeFile(hashFile, response); // saving hash
                                 downloadFile();
                             }
                         } catch (XmlPullParserException | IOException e) {
@@ -69,42 +73,19 @@ public class TaskDownloader {
         queue.add(hashRequest);
     }
 
-    private String hashFromReader(Reader reader) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        XmlPullParser parser = factory.newPullParser();
-        parser.setInput(reader);
-        int eventType = parser.getEventType();
-
-        String hash = null;
-
-        while (eventType != XmlResourceParser.END_DOCUMENT) {
-            if (eventType == XmlResourceParser.START_TAG && parser.getName().equals(hashTag)) {
-                hash = parser.nextText();
-            }
-            eventType = parser.next();
-        }
-        return hash;
-    }
-
     private boolean need2dl(String hashXml) throws XmlPullParserException, IOException {
-        String hash = hashFromReader(new StringReader(hashXml));
+        boolean hashFileExists = hashFile.exists();
+        boolean mainFileExists = mainFile.exists();
+        logd("Hash file exists:", hashFileExists);
+        logd("Main file exists:", mainFileExists);
+        if (!hashFileExists || !mainFileExists) return true;
 
-        if (hash == null) return true;
-
-        if (!mainFile.exists()) return true;
-        boolean hashesAreEq = areHashesEqual(hash);
-
-        return !hashesAreEq;
-    }
-
-    private boolean areHashesEqual(String hash) throws XmlPullParserException, IOException {
-        File hashFile = new File(mainDir, "hash.xml");
-
-        if (!hashFile.exists()) return false;
-
-        String fileHash = hashFromReader(new FileReader(hashFile));
-
-        return fileHash != null && fileHash.equals(hash);
+        String hashFileContent = readFile(hashFile);
+        logd("Hash file content:", hashFileContent);
+        logd("Internet content:", hashXml);
+        boolean hashesAreEqual = hashXml.equals(hashFileContent);
+        logd("Hashes are equal:", hashesAreEqual);
+        return !hashesAreEqual;
 
     }
 
@@ -116,7 +97,7 @@ public class TaskDownloader {
                     public void onResponse(String response) {
                         try {
                             logd("Got file:", response);
-                            writeFile(response);
+                            writeTask(response.trim());
                             logd("File has been written: " + mainFile.exists());
                         } catch (IOException | XmlPullParserException e) {
                             e.printStackTrace();
@@ -131,7 +112,24 @@ public class TaskDownloader {
         queue.add(tasksRequest);
     }
 
-    private void writeFile(String content) throws IOException, XmlPullParserException {
+    private String readFile(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line).append('\n');
+        }
+        reader.close();
+        return builder.toString();
+    }
+
+    private void writeFile(File file, String content) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(content.getBytes());
+        fos.close();
+    }
+
+    private void writeTask(String content) throws IOException, XmlPullParserException {
         FileOutputStream fos = new FileOutputStream(mainFile);
         fos.write(content.getBytes());
         fos.close();
@@ -169,6 +167,7 @@ public class TaskDownloader {
             }
             eventType = parser.next();
         }
+        parser = null;
         for (Task task : tasks) {
             File currentFile = new File(mainDir, task.name);
             FileOutputStream tfos = new FileOutputStream(currentFile);

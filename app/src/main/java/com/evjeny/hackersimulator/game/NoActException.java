@@ -1,12 +1,12 @@
 package com.evjeny.hackersimulator.game;
 
 /**
- * Created by Evjeny on 20.01.2018 16:34.
+ * Created by evjeny on 23.03.2018 6:36.
  */
 
-public class StoryEndException extends Throwable {
-    StoryEndException() {
-        super("Story ended!");
+public class NoActException extends Throwable {
+    public NoActException() {
+        super("No such act!");
     }
 
     @Override

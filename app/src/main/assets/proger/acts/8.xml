@@ -1,0 +1,11 @@
+<act type="code">
+    <content>
+        <ci>s2c1</ci>
+    </content>
+    <bar>
+        <button type="text">
+            <name>@string/next</name>
+            <action>check</action>
+        </button>
+    </bar>
+</act>

@@ -1,0 +1,14 @@
+<act type="image">
+    <content>
+        <ci src="s1a1p1.png" />
+        <ci src="s1a1p2.png" />
+        <ci src="s1a1p3.png" />
+        <ci src="s1a1p4.png" />
+    </content>
+    <bar>
+        <button type="text">
+            <name>@string/next</name>
+            <action>nextAct_2.xml</action>
+        </button>
+    </bar>
+</act>

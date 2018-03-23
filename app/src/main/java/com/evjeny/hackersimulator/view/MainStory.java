@@ -7,11 +7,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.evjeny.hackersimulator.R;
+import com.evjeny.hackersimulator.game.Act;
 import com.evjeny.hackersimulator.game.GameSave;
-import com.evjeny.hackersimulator.game.Scene;
-import com.evjeny.hackersimulator.game.StoryEndException;
+import com.evjeny.hackersimulator.game.NoActException;
 import com.evjeny.hackersimulator.game.Storyline;
 import com.evjeny.hackersimulator.model.GameSaver;
+import com.evjeny.hackersimulator.model.TaskDownloader;
 import com.evjeny.hackersimulator.model.TaskSender;
 
 import org.json.JSONException;
@@ -24,12 +25,13 @@ public class MainStory extends AppCompatActivity {
 
     private GameSaver saver;
     private TaskSender sender;
+    private TaskDownloader downloader;
     private GameSave save;
     private Storyline storyline;
-    private SceneGenerator generator;
+    private ActGenerator generator;
     private pcInterface pointerChangedInterface;
 
-    private int pointer;
+    private String currentAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainStory extends AppCompatActivity {
         save = (GameSave) getIntent().getSerializableExtra("save");
         saver = new GameSaver(this);
         sender = new TaskSender(this);
+        downloader = new TaskDownloader(this);
 
         try {
             storyline = new Storyline(this, save.getGameType());
@@ -49,17 +52,17 @@ public class MainStory extends AppCompatActivity {
             e.printStackTrace();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
-        generator = new SceneGenerator(this,
+        generator = new ActGenerator(this,
                 fragmentManager, main_fragment, main_bar, save.getGameType());
 
-        pointer = save.getCurrentScene();
+        currentAct = save.getCurrentAct();
 
         pointerChangedInterface = new pcInterface() {
             @Override
             public void onPointerChanged() {
                 try {
-                    Scene current = storyline.get(pointer);
-                    generator.generateScene(current, new SceneGenerator.storyInterface() {
+                    final Act current = storyline.get(currentAct);
+                    generator.generateActAuto(current, new ActGenerator.storyInterface() {
                         @Override
                         public void actStart() {
 
@@ -68,6 +71,12 @@ public class MainStory extends AppCompatActivity {
                         @Override
                         public void nextContent() {
 
+                        }
+
+                        @Override
+                        public void nextAct(String actName) {
+                            currentAct = actName;
+                            pointerChangedInterface.onPointerChanged();
                         }
 
                         @Override
@@ -94,19 +103,13 @@ public class MainStory extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-
-                        @Override
-                        public void sceneEnd() {
-                            pointer++;
-                            pointerChangedInterface.onPointerChanged();
-                        }
                     });
 
-                } catch (StoryEndException e) {
-                    e.printStackTrace();
-                    Toast.makeText(MainStory.this, "Thx 4 playing!", Toast.LENGTH_SHORT).show();
                 } catch (IOException | XmlPullParserException e) {
                     e.printStackTrace();
+                } catch (NoActException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainStory.this, "No such act!", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -121,7 +124,7 @@ public class MainStory extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        save.setCurrentScene(pointer);
+        save.setCurrentAct(currentAct);
         try {
             saver.writeLevel(save);
         } catch (IOException e) {

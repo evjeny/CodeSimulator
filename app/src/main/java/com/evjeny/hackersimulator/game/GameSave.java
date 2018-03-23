@@ -11,18 +11,18 @@ public class GameSave implements Serializable {
     private final String worldName;
     private final GameType gameType;
     private String playerName;
-    private int currentScene;
+    private String currentAct;
 
     public GameSave(String worldName, GameType gameType) {
         this.worldName = worldName;
         this.gameType = gameType;
     }
 
-    public GameSave(String worldName, String playerName, GameType gameType, int currentScene) {
+    public GameSave(String worldName, String playerName, GameType gameType, String currentAct) {
         this.worldName = worldName;
         this.playerName = playerName;
         this.gameType = gameType;
-        this.currentScene = currentScene;
+        this.currentAct = currentAct;
 
     }
 
@@ -42,11 +42,11 @@ public class GameSave implements Serializable {
         return gameType;
     }
 
-    public int getCurrentScene() {
-        return currentScene;
+    public String getCurrentAct() {
+        return currentAct;
     }
 
-    public void setCurrentScene(int currentScene) {
-        this.currentScene = currentScene;
+    public void setCurrentAct(String currentAct) {
+        this.currentAct = currentAct;
     }
 }

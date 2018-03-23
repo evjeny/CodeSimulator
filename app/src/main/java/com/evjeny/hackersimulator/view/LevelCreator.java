@@ -73,10 +73,9 @@ public class LevelCreator extends AppCompatActivity {
     public GameSave saveLevel() {
         String worldName = level_name.getText().toString(),
                 playerName = player_name.getText().toString();
-        int currentScene = 1;
         if (!worldName.isEmpty() && !playerName.isEmpty()) {
             try {
-                return saver.writeLevel(worldName, playerName, gameType, currentScene);
+                return saver.writeLevel(worldName, playerName, gameType, "1.xml");
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
