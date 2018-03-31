@@ -1,13 +1,14 @@
-<act type="image">
-    <content>
-        <ci src="s2a1p1.png">
-            <text text="Входящие" color="#000000" x="20" y="50" textSize="60" />
-        </ci>
-    </content>
-    <bar>
-        <button type="text">
-            <name>Открыть</name>
-            <action>nextAct_7.xml</action>
-        </button>
-    </bar>
-</act>
+<scene>
+	<act type="image">
+		<content>
+			<ci src="d.a6.png">
+			</ci>
+		</content>
+		<bar>
+			<button type="text">
+				<name>@string/next</name>
+				<action>nextAct_7.xml</action>
+			</button>
+		</bar>
+	</act>
+</scene>

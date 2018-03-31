@@ -5,7 +5,6 @@ package com.evjeny.hackersimulator.game;
  */
 
 public class CodePart {
-    public long id;
     public final Type type;
     public final String value;
 

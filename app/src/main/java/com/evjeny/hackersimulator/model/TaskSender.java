@@ -36,17 +36,22 @@ public class TaskSender {
     /**
      * Посылает на сервер исходный код и id задачи, принимает номер проверки на сервере
      * Вызывает метод repeatableCheck, чтобы получить результат
+     *
      * @param source - исходный код для задачи
      * @param id     - id задачи
      * @param ri     - интерфейс для принятия значений
-     * @throws JSONException
-     * {@link #repeatableCheck(int, ResultInterface)}
-     * {@link #getRes(int, CheckResultInterface)}
+     * @throws JSONException {@link #repeatableCheck(int, ResultInterface)}
+     *                       {@link #getRes(int, CheckResultInterface)}
      */
-    public void sendRequest(String source, long id, final ResultInterface ri) throws JSONException {
+    public void sendRequest(String source, long id, final ResultInterface ri) {
         JSONObject params = new JSONObject();
-        params.put("Source", source);
-        params.put("IDZadanie_Vopros", id);
+
+        try {
+            params.put("Source", source);
+            params.put("IDZadanie_Vopros", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, SEND_CODE_ADDRESS, params,
                 new Response.Listener<JSONObject>() {
@@ -64,10 +69,19 @@ public class TaskSender {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        logd(error.toString());
+                        JSONObject res = new JSONObject();
+                        try {
+                            res.put("resultCode", -1);
+                            res.put("result", "");
+                            res.put("input", "");
+                            res.put("log_test", -1);
+                            res.put("isRunning", false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ri.result(res);
                     }
-                })
-        {
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -82,6 +96,7 @@ public class TaskSender {
     /**
      * Вызывает проверку кода на сервере через промежуток в 2 секунды, если приходит результат,
      * возвращает значение в ResultInterface
+     *
      * @param waitId
      * @param ri
      * @see ResultInterface
@@ -91,30 +106,39 @@ public class TaskSender {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                try {
-                    getRes(waitId, new CheckResultInterface() {
-                        @Override
-                        public void result(JSONObject checkResult) {
-                            try {
-                                checkResult = checkResult.getJSONObject("d");
-                                if (!checkResult.getBoolean("isRuning")) {
-                                    ri.result(checkResult);
-                                    timer.cancel();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                getRes(waitId, new CheckResultInterface() {
+                    @Override
+                    public void result(JSONObject checkResult) {
+                        try {
+                            checkResult = checkResult.getJSONObject("d");
+                            boolean isRunning = checkResult.getBoolean("isRunning");
+                            if (!isRunning) {
+                                ri.result(checkResult);
+                                timer.cancel();
+                                timer.purge();
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                    }
 
-                        @Override
-                        public void error() {
-                            ri.result(null);
-                            timer.cancel();
+                    @Override
+                    public void error() {
+                        JSONObject res = new JSONObject();
+                        try {
+                            res.put("resultCode", -1);
+                            res.put("result", "");
+                            res.put("input", "");
+                            res.put("log_test", -1);
+                            res.put("isRunning", false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        ri.result(res);
+                        timer.cancel();
+                        timer.purge();
+                    }
+                });
             }
         };
         timer.scheduleAtFixedRate(task, 0, 2000);
@@ -135,9 +159,13 @@ public class TaskSender {
      * @throws JSONException
      * @see CheckResultInterface
      */
-    private void getRes(int waitId, final CheckResultInterface cr) throws JSONException {
+    private void getRes(int waitId, final CheckResultInterface cr) {
         JSONObject params = new JSONObject();
-        params.put("IDLog", waitId);
+        try {
+            params.put("IDLog", waitId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, GET_RESULT_ADDRESS, params,
                 new Response.Listener<JSONObject>() {
@@ -153,8 +181,7 @@ public class TaskSender {
                         logd(error.toString());
                         cr.error();
                     }
-                })
-        {
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -181,6 +208,7 @@ public class TaskSender {
 
     private interface CheckResultInterface {
         void result(JSONObject checkResult);
+
         void error();
     }
 }

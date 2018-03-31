@@ -11,8 +11,12 @@ public class CodeContent extends Content{
 
     public long id;
 
-    public CodeContent(List<CodePart> fragments, long id) {
+    private String hint;
+
+    public CodeContent(List<CodePart> fragments, long id, String hint) {
         super(new ArrayList<Object>(fragments));
+        this.id = id;
+        this.hint = hint;
     }
 
     public List<CodePart> getFragments() {
@@ -25,4 +29,7 @@ public class CodeContent extends Content{
         return (CodePart) this.contents.get(index);
     }
 
+    public String getHint() {
+        return hint;
+    }
 }

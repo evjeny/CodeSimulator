@@ -1,11 +1,13 @@
-<act type="image">
-    <content>
-        <ci src="s2a3p1.png" />
-    </content>
-    <bar>
-        <button type="text">
-            <name>Входной тест</name>
-            <action>actEnd</action>
-        </button>
-    </bar>
-</act>
+<scene>
+	<act type="text">
+		<content>
+			<ci>Ну что ж, надеюсь, вы все поняли, а теперь решим несколько задач для практики</ci>
+		</content>
+		<bar>
+			<button type="text">
+				<name>Приступить к решению</name>
+				<action>nextAct_10.xml</action>
+			</button>
+		</bar>
+	</act>
+</scene>

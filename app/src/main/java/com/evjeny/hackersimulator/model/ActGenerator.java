@@ -1,4 +1,4 @@
-package com.evjeny.hackersimulator.view;
+package com.evjeny.hackersimulator.model;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +19,10 @@ import com.evjeny.hackersimulator.game.CodePart;
 import com.evjeny.hackersimulator.game.GameType;
 import com.evjeny.hackersimulator.game.ImageContent;
 import com.evjeny.hackersimulator.game.StoryContent;
+import com.evjeny.hackersimulator.view.CodeFragment;
+import com.evjeny.hackersimulator.view.ImageFragment;
+import com.evjeny.hackersimulator.view.MessageFragment;
+import com.evjeny.hackersimulator.view.TImageView;
 import com.pixplicity.htmlcompat.HtmlCompat;
 
 import java.util.ArrayList;
@@ -27,15 +31,15 @@ import java.util.ArrayList;
  * Created by evjeny on 21.01.2018 10:08 6:41.
  */
 
-class ActGenerator {
+public class ActGenerator {
     private Context context;
     private FragmentManager manager;
     private ViewGroup fragmentHolder, buttonHolder;
 
     private Bundle args;
 
-    ActGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
-                 ViewGroup buttonHolder, GameType type) {
+    public ActGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
+                        ViewGroup buttonHolder, GameType type) {
         this.context = context;
         this.manager = manager;
         this.fragmentHolder = fragmentHolder;
@@ -46,7 +50,6 @@ class ActGenerator {
     }
 
     public void generateActAuto(final Act act, final storyInterface intf) {
-        intf.actStart();
         switch (act.type) {
             case STORY:
                 generateStoryAct(act, intf);
@@ -91,23 +94,19 @@ class ActGenerator {
                         @Override
                         public void onClick(View view) {
                             String action = button.action;
-                            if (action.equals("nextContent")) {
+                            if (action.startsWith("nextAct")) {
                                 pointer[0]++;
                                 if (pointer[0] < content.getMessages().size()) {
-                                    intf.nextContent();
-
                                     mf_tv.setText(HtmlCompat.fromHtml(context, content.getMessage(pointer[0]),
                                             HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS));
                                 } else {
-                                    intf.actEnd();
+                                    String actName = action.split("_")[1];
+                                    intf.nextAct(actName);
                                 }
-                            } else if (action.startsWith("nextAct")) {
-                                String actName = action.split("_")[1];
-                                intf.nextAct(actName);
                             } else if (action.equals("stop")) {
                                 intf.stop();
-                            } else if (action.equals("actEnd")) {
-                                intf.actEnd();
+                            } else if (action.equals("endStory")) {
+                                intf.endStory();
                             }
                         }
                     });
@@ -145,21 +144,18 @@ class ActGenerator {
                         @Override
                         public void onClick(View view) {
                             String action = button.action;
-                            if (action.equals("nextContent")) {
+                            if (action.startsWith("nextAct")) {
                                 pointer[0]++;
                                 if (pointer[0] < content.getImages().size()) {
-                                    intf.nextContent();
                                     imageView.generateImage(content.getImage(pointer[0]));
                                 } else {
-                                    intf.actEnd();
+                                    String actName = action.split("_")[1];
+                                    intf.nextAct(actName);
                                 }
-                            } else if (action.startsWith("nextAct")) {
-                                String actName = action.split("_")[1];
-                                intf.nextAct(actName);
                             } else if (action.equals("stop")) {
                                 intf.stop();
-                            } else if (action.equals("actEnd")) {
-                                intf.actEnd();
+                            } else if (action.equals("endStory")) {
+                                intf.endStory();
                             }
                         }
                     });
@@ -204,6 +200,8 @@ class ActGenerator {
                 Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
+                    final String action = button.action;
+
                     android.widget.Button b = new android.widget.Button(context);
 
                     b.setLayoutParams(params);
@@ -213,20 +211,26 @@ class ActGenerator {
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String action = button.action;
-                            if (action.equals("check")) {
-                                intf.check(parts.get(1).getText().toString(), content.id);
+
+                            if (action.startsWith("check")) {
+                                String actName = action.split("_")[1];
+                                intf.check(actName, parts.get(1).getText().toString(), content.id);
+                            } else if (action.equals("hint")) {
+                                intf.hint(content.getHint());
                             } else if (action.startsWith("nextAct")) {
                                 String actName = action.split("_")[1];
                                 intf.nextAct(actName);
                             } else if (action.equals("stop")) {
                                 intf.stop();
-                            } else if (action.equals("actEnd")) {
-                                intf.actEnd();
+                            } else if (action.equals("endStory")) {
+                                intf.endStory();
                             }
                         }
                     });
                     buttonHolder.addView(b);
+                    if (action.equals("hint") && content.getHint() == null) {
+                        b.setEnabled(false);
+                    }
                 }
             }
         });
@@ -235,17 +239,15 @@ class ActGenerator {
 
     public interface storyInterface {
 
-        void actStart();
-
-        void nextContent();
-
         void nextAct(String actName);
-
-        void actEnd();
 
         void stop();
 
-        void check(String code, long id);
+        void check(String actName, String code, long id);
+
+        void hint(String hintText);
+
+        void endStory();
 
     }
 }

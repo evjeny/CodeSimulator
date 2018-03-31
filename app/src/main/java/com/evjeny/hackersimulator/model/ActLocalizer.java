@@ -225,6 +225,7 @@ public class ActLocalizer {
     }
 
     private CodeContent parseCodeContent(String name) {
+        String hint;
         try {
             File mainDir = new File(context.getFilesDir(), "tasks");
             File currentTask = new File(mainDir, name);
@@ -235,12 +236,16 @@ public class ActLocalizer {
             String content = readFile(currentTask);
             JSONObject codeFile = new JSONObject(content).getJSONObject("task");
 
+            String[] ps = codeFile.getString("text")
+                    .replace("<br />", "\n")
+                    .replace("&quot;", "\"")
+                    .split("=====");
+
             ArrayList<CodePart> parts = new ArrayList<>();
-            parts.add(new CodePart(CodePart.Type.READABLE, codeFile.getString("text")
-                    .replace("<br />", "\n")));
+            parts.add(new CodePart(CodePart.Type.READABLE, ps[0]));
             parts.add(new CodePart(CodePart.Type.WRITABLE));
 
-            return new CodeContent(parts, codeFile.getLong("id"));
+            return new CodeContent(parts, codeFile.getLong("id"), ps.length > 1 ? ps[1] : null);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
             return null;

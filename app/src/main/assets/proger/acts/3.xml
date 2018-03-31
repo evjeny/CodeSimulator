@@ -1,11 +1,13 @@
-<act type="image">
-    <content>
-        <ci src="s1a3p1.png" />
-    </content>
-    <bar>
-        <button type="text">
-            <name>@string/next</name>
-            <action>nextAct_4.xml</action>
-        </button>
-    </bar>
-</act>
+<scene>
+	<act type="text">
+		<content>
+			<ci>Сегодня я проснулся раньше обычного, мне даже не пришлось делать все сломя голову.</ci>
+		</content>
+		<bar>
+			<button type="text">
+				<name>@string/next</name>
+				<action>nextAct_4.xml</action>
+			</button>
+		</bar>
+	</act>
+</scene>

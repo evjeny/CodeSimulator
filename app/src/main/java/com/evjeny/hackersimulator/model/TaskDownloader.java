@@ -173,7 +173,7 @@ public class TaskDownloader {
             FileOutputStream tfos = new FileOutputStream(currentFile);
             tfos.write(task.toString().getBytes());
             tfos.close();
-            logd("Wrote file:", task.name, ", content: ", task);
+            logd("Wrote file:", currentFile.getAbsolutePath(), ", content: ", task);
         }
     }
 

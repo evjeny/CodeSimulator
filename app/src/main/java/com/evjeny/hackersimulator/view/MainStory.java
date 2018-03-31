@@ -2,7 +2,9 @@ package com.evjeny.hackersimulator.view;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import com.evjeny.hackersimulator.game.Act;
 import com.evjeny.hackersimulator.game.GameSave;
 import com.evjeny.hackersimulator.game.NoActException;
 import com.evjeny.hackersimulator.game.Storyline;
+import com.evjeny.hackersimulator.model.ActGenerator;
 import com.evjeny.hackersimulator.model.GameSaver;
 import com.evjeny.hackersimulator.model.TaskDownloader;
 import com.evjeny.hackersimulator.model.TaskSender;
@@ -64,24 +67,9 @@ public class MainStory extends AppCompatActivity {
                     final Act current = storyline.get(currentAct);
                     generator.generateActAuto(current, new ActGenerator.storyInterface() {
                         @Override
-                        public void actStart() {
-
-                        }
-
-                        @Override
-                        public void nextContent() {
-
-                        }
-
-                        @Override
                         public void nextAct(String actName) {
                             currentAct = actName;
                             pointerChangedInterface.onPointerChanged();
-                        }
-
-                        @Override
-                        public void actEnd() {
-
                         }
 
                         @Override
@@ -90,18 +78,26 @@ public class MainStory extends AppCompatActivity {
                         }
 
                         @Override
-                        public void check(String code, long id) {
-                            try {
+                        public void check(final String actName, String code, long id) {
+                            Log.d("MainStory", "check: "+code+", "+id);
+                            if (!code.equals("")) {
                                 sender.sendRequest(code, id, new TaskSender.ResultInterface() {
                                     @Override
                                     public void result(JSONObject res) {
-                                        Toast.makeText(MainStory.this,
-                                                res.toString(), Toast.LENGTH_SHORT).show();
+                                        handleResult(actName, res);
                                     }
                                 });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
+                        }
+
+                        @Override
+                        public void hint(String hintText) {
+                            showHint(hintText);
+                        }
+
+                        @Override
+                        public void endStory() {
+                            Toast.makeText(MainStory.this, "The end!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -115,6 +111,50 @@ public class MainStory extends AppCompatActivity {
         };
 
         pointerChangedInterface.onPointerChanged();
+    }
+
+    private void handleResult(String actName, JSONObject res) {
+        try {
+            int resultCode = res.getInt("resultCode");
+            String result = res.getString("result");
+            String input = res.getString("input");
+            String logTest = res.getString("log_test");
+
+            if (resultCode == 1) {
+                currentAct = actName;
+                pointerChangedInterface.onPointerChanged();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Ошибка!");
+                String message = null;
+                if (resultCode == -1) {
+                    message = "Ошибка сервера";
+                } else if (resultCode == 2) {
+                    message = "Программа не прошла проверку на части тестов";
+                } else if (resultCode == 3) {
+                    message = "Ошибка компиляции";
+                } else if (resultCode == 4) {
+                    message = "Ошибка во время исполнения программы";
+                } else if (resultCode == 5) {
+                    message = "Превышено время исполнения";
+                } else if (resultCode == 6) {
+                    message = "Превышен лимит памяти";
+                }
+                builder.setMessage(message);
+                builder.setNegativeButton("Ok", null);
+                builder.show().show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showHint(String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Hint");
+        builder.setMessage(text);
+        builder.setNegativeButton("Ok", null);
+        builder.show().show();
     }
 
     private interface pcInterface {
