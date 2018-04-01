@@ -102,10 +102,13 @@ public class ActGenerator {
                                 } else {
                                     String actName = action.split("_")[1];
                                     intf.nextAct(actName);
+                                    intf.save();
                                 }
                             } else if (action.equals("stop")) {
+                                intf.save();
                                 intf.stop();
                             } else if (action.equals("endStory")) {
+                                intf.save();
                                 intf.endStory();
                             }
                         }
@@ -151,10 +154,13 @@ public class ActGenerator {
                                 } else {
                                     String actName = action.split("_")[1];
                                     intf.nextAct(actName);
+                                    intf.save();
                                 }
                             } else if (action.equals("stop")) {
+                                intf.save();
                                 intf.stop();
                             } else if (action.equals("endStory")) {
+                                intf.save();
                                 intf.endStory();
                             }
                         }
@@ -220,9 +226,12 @@ public class ActGenerator {
                             } else if (action.startsWith("nextAct")) {
                                 String actName = action.split("_")[1];
                                 intf.nextAct(actName);
+                                intf.save();
                             } else if (action.equals("stop")) {
+                                intf.save();
                                 intf.stop();
                             } else if (action.equals("endStory")) {
+                                intf.save();
                                 intf.endStory();
                             }
                         }
@@ -248,6 +257,8 @@ public class ActGenerator {
         void hint(String hintText);
 
         void endStory();
+
+        void save();
 
     }
 }

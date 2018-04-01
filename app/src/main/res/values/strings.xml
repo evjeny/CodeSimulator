@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hacker Simulator</string>
+    <string name="app_name">Code Simulator</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="next">Next</string>
@@ -15,4 +15,5 @@
     <string name="notebook">Notebook</string>
     <string name="remove_q">Remove?</string>
     <string name="title_activity_notebook_viewer">Notebook viewer</string>
+    <string name="settings">Settings</string>
 </resources>

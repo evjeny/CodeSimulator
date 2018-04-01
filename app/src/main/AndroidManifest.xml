@@ -24,8 +24,8 @@
         <activity android:name=".view.NotebookActivity" />
         <activity
             android:name=".view.NotebookViewerActivity"
-            android:label="@string/title_activity_notebook_viewer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_notebook_viewer" />
+        <activity android:name=".view.SettingsActivity" android:label="@string/settings" />
     </application>
 
 </manifest>

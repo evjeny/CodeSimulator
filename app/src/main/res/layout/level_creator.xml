@@ -16,14 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/level_name" />
+            android:hint="@string/level_name"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/l_creator_player_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/player_name" />
+            android:hint="@string/player_name"
+            android:inputType="textPersonName" />
 
         <Spinner
             android:id="@+id/l_creator_world_type"

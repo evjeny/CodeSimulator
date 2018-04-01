@@ -22,4 +22,9 @@
         android:layout_height="wrap_content"
         android:text="@string/notebook"
         android:onClick="notebook"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings"
+        android:onClick="settings"/>
 </LinearLayout>

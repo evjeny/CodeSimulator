@@ -40,7 +40,7 @@ public class TaskDownloader {
     private final String hashUrl = "http://silvertests.ru/XML/GetQuestionsHashPython.ashx";
     private final String tasksUrl = "http://silvertests.ru/XML/GetQuestionsPython.ashx";
 
-    public TaskDownloader(Context context) {
+    public TaskDownloader(Context context, boolean needsAuto) {
 
         mainDir = new File(context.getFilesDir(), "tasks");
         if (!mainDir.exists()) mainDir.mkdir();
@@ -51,29 +51,31 @@ public class TaskDownloader {
 
         queue = QueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
 
-        StringRequest hashRequest = new StringRequest(Request.Method.GET, hashUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            if (need2dl(response)) {
-                                writeFile(hashFile, response); // saving hash
-                                downloadFile();
+        if (needsAuto) {
+            StringRequest hashRequest = new StringRequest(Request.Method.GET, hashUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                if (need2dl(response)) {
+                                    writeFile(hashFile, response); // saving hash
+                                    downloadFile();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (XmlPullParserException | IOException e) {
-                            e.printStackTrace();
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        queue.add(hashRequest);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+            queue.add(hashRequest);
+        }
     }
 
-    private boolean need2dl(String hashXml) throws XmlPullParserException, IOException {
+    private boolean need2dl(String hashXml) throws IOException {
         boolean hashFileExists = hashFile.exists();
         boolean mainFileExists = mainFile.exists();
         logd("Hash file exists:", hashFileExists);
@@ -89,7 +91,7 @@ public class TaskDownloader {
 
     }
 
-    private void downloadFile() {
+    public void downloadFile() {
 
         StringRequest tasksRequest = new StringRequest(Request.Method.GET, tasksUrl,
                 new Response.Listener<String>() {

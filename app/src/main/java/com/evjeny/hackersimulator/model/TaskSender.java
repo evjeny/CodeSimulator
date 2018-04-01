@@ -22,6 +22,7 @@ import java.util.TimerTask;
  * Created by evjeny on 13.03.2018 19:17.
  */
 
+@SuppressWarnings("FieldCanBeLocal")
 public class TaskSender {
 
     private RequestQueue queue;

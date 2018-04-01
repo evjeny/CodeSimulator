@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="data_types">Типы данных</string>
+    <string name="basic_operations">Базовые операции</string>
 </resources>

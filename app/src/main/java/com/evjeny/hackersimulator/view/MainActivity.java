@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity{
 
     private final int CREATE_GAME =  0, CONTINUE_GAME = 1;
 
-    private TaskDownloader downloader;
     private TaskSender sender;
 
     @Override
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        downloader = new TaskDownloader(this);
+        new TaskDownloader(this, true);
         sender = new TaskSender(this);
     }
 
@@ -68,6 +67,11 @@ public class MainActivity extends AppCompatActivity{
     public void notebook(View v) {
         Intent nb = new Intent(this, NotebookActivity.class);
         startActivity(nb);
+    }
+
+    public void settings(View view) {
+        Intent settings = new Intent(this, SettingsActivity.class);
+        startActivity(settings);
     }
 
     @Override

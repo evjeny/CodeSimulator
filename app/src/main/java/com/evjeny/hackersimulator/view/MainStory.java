@@ -15,7 +15,6 @@ import com.evjeny.hackersimulator.game.NoActException;
 import com.evjeny.hackersimulator.game.Storyline;
 import com.evjeny.hackersimulator.model.ActGenerator;
 import com.evjeny.hackersimulator.model.GameSaver;
-import com.evjeny.hackersimulator.model.TaskDownloader;
 import com.evjeny.hackersimulator.model.TaskSender;
 
 import org.json.JSONException;
@@ -28,7 +27,6 @@ public class MainStory extends AppCompatActivity {
 
     private GameSaver saver;
     private TaskSender sender;
-    private TaskDownloader downloader;
     private GameSave save;
     private Storyline storyline;
     private ActGenerator generator;
@@ -47,7 +45,6 @@ public class MainStory extends AppCompatActivity {
         save = (GameSave) getIntent().getSerializableExtra("save");
         saver = new GameSaver(this);
         sender = new TaskSender(this);
-        downloader = new TaskDownloader(this);
 
         try {
             storyline = new Storyline(this, save.getGameType());
@@ -99,6 +96,16 @@ public class MainStory extends AppCompatActivity {
                         public void endStory() {
                             Toast.makeText(MainStory.this, "The end!", Toast.LENGTH_SHORT).show();
                         }
+
+                        @Override
+                        public void save() {
+                            try {
+                                save.setCurrentAct(currentAct);
+                                saver.writeLevel(save);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     });
 
                 } catch (IOException | XmlPullParserException e) {
@@ -119,6 +126,8 @@ public class MainStory extends AppCompatActivity {
             String result = res.getString("result");
             String input = res.getString("input");
             String logTest = res.getString("log_test");
+            Log.d("MainStory", "handleResult: " + result + " " +
+            input + " " + logTest);
 
             if (resultCode == 1) {
                 currentAct = actName;
@@ -130,7 +139,8 @@ public class MainStory extends AppCompatActivity {
                 if (resultCode == -1) {
                     message = "Ошибка сервера";
                 } else if (resultCode == 2) {
-                    message = "Программа не прошла проверку на части тестов";
+                    message = "Программа выдала неправильный ответ на тесте.\n" +
+                            getWrongTest(input, result);
                 } else if (resultCode == 3) {
                     message = "Ошибка компиляции";
                 } else if (resultCode == 4) {
@@ -146,6 +156,32 @@ public class MainStory extends AppCompatActivity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private String getWrongTest(String input, String result) {
+        String wtn = "-1";
+        String res = "-1";
+        for (String test : result.split("`")) {
+            String[] base = test.split("№");
+            if (!base[1].equals("Accepted")) {
+                wtn = base[0];
+                res = base[1];
+                break;
+            }
+        }
+        if (!wtn.equals("-1")) {
+            String inp = "-1";
+            for (String test : input.split("'")) {
+                String[] base = test.split("№");
+                if (base[0].equals(wtn)) {
+                    inp = base[1];
+                    break;
+                }
+            }
+            return "Входные данные:\n" + inp + "\nВаши выходные данные:\n" + res;
+        } else {
+            return "Ошибка при загрузке теста";
         }
     }
 
