@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    
-    <color name="black">#000000</color>
-    <color name="green">#14ff14</color>
-    <color name="green_dark">#098309</color>
-    <color name="grey">#4b4b4b</color>
-    <color name="red">#790000</color>
-
-    <color name="proger_light_green">#8de19a</color>
-    <color name="proger_dark_green">#5dbd75</color>
-    <color name="proger_weirdo">#d6b994</color>
+    <color name="colorPrimary">#ffc629</color>
+    <color name="colorPrimaryDark">#e6bf53</color>
+    <color name="colorAccent">#8d29ff</color>
 </resources>

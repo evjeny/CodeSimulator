@@ -40,7 +40,6 @@ public class ActGenerator {
     private Bundle args;
 
     private int textSize;
-    private int buttonStyle;
 
     public ActGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
                         ViewGroup buttonHolder, GameType type) {
@@ -49,17 +48,11 @@ public class ActGenerator {
         this.fragmentHolder = fragmentHolder;
         this.buttonHolder = buttonHolder;
         this.args = new Bundle();
-        int style;
-        if (type == GameType.proger) {
-            style = R.style.ProgerTheme;
-        } else {
-            style = R.style.HackerTheme;
-        }
+        int style = R.style.AppTheme;
         this.args.putInt("style", style);
 
         this.textSize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("textSize", "22"));
-        this.buttonStyle = type == GameType.proger ? R.style.ProgerTheme_Button : R.style.ProgerTheme_Button;
     }
 
     public void generateActAuto(final Act act, final storyInterface intf) {
