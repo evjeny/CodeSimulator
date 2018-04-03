@@ -1,18 +1,17 @@
 package com.evjeny.hackersimulator.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.evjeny.hackersimulator.R;
 import com.evjeny.hackersimulator.game.GameSave;
 import com.evjeny.hackersimulator.model.TaskDownloader;
-import com.evjeny.hackersimulator.model.TaskSender;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.IOException;
 
 /**
  * Created by Evjeny on 25.01.2018 17:59.
@@ -22,34 +21,46 @@ public class MainActivity extends AppCompatActivity{
 
     private final int CREATE_GAME =  0, CONTINUE_GAME = 1;
 
-    private TaskSender sender;
+    private TaskDownloader downloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new TaskDownloader(this, true);
-        sender = new TaskSender(this);
-    }
-
-    private void sendTasksAndCheck() throws JSONException {
-        int id = 756597;
-        String code = "a = int(input())\n" +
-                "b = int(input())\n" +
-                "c = int(input())\n" +
-                "k = int(input())\n" +
-                "n = int(input())\n" +
-                "z = int(input())\n" +
-                "print(((a ** 10) * (b ** 3) - k * (a ** 2 + b ** 7)) / (c + k * (n ** 7)) * z)\n";
-        sender.sendRequest(code, id, new TaskSender.ResultInterface() {
+        downloader = new TaskDownloader(this);
+        downloader.makeHashRequest(new TaskDownloader.resInt() {
             @Override
-            public void result(JSONObject res) {
-                if (res == null) {
-                    Log.d("MainActivity", "result: null");
-                } else {
-                    Log.d("MainActivity", "result: " + res.toString());
+            public void good() {
+                try {
+                    if (downloader.need2dl(downloader.netHash)) {
+                        final ProgressDialog dialog = ProgressDialog.show(MainActivity.this,
+                                "Загрузка заданий",
+                                "Пожалуйста, подождите...",
+                                true);
+                        dialog.setCancelable(false);
+                        downloader.downloadFile(new TaskDownloader.resInt() {
+                            @Override
+                            public void good() {
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void error() {
+                                dialog.dismiss();
+                                Toast.makeText(MainActivity.this,
+                                        "Ошибка при загрузке заданий. Проверьте соединение.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void error() {
             }
         });
     }

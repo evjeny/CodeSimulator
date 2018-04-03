@@ -2,6 +2,7 @@ package com.evjeny.hackersimulator.model;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -38,6 +39,9 @@ public class ActGenerator {
 
     private Bundle args;
 
+    private int textSize;
+    private int buttonStyle;
+
     public ActGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
                         ViewGroup buttonHolder, GameType type) {
         this.context = context;
@@ -45,8 +49,17 @@ public class ActGenerator {
         this.fragmentHolder = fragmentHolder;
         this.buttonHolder = buttonHolder;
         this.args = new Bundle();
-        int style = type == GameType.proger ? R.style.ProgerTheme : R.style.HackerTheme;
+        int style;
+        if (type == GameType.proger) {
+            style = R.style.ProgerTheme;
+        } else {
+            style = R.style.HackerTheme;
+        }
         this.args.putInt("style", style);
+
+        this.textSize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("textSize", "22"));
+        this.buttonStyle = type == GameType.proger ? R.style.ProgerTheme_Button : R.style.ProgerTheme_Button;
     }
 
     public void generateActAuto(final Act act, final storyInterface intf) {
@@ -76,6 +89,7 @@ public class ActGenerator {
             public void run() {
 
                 final TextView mf_tv = messageFragment.getView().findViewById(R.id.message_fragment_tv);
+                mf_tv.setTextSize(textSize);
                 final StoryContent content = (StoryContent) act.content;
                 final int[] pointer = {0};
                 mf_tv.setText(HtmlCompat.fromHtml(context, content.getMessage(pointer[0]),
@@ -192,6 +206,7 @@ public class ActGenerator {
                     if (codePart.type == CodePart.Type.READABLE) {
                         TextView textView = new TextView(context);
                         textView.setText(codePart.value);
+                        textView.setTextSize(textSize);
                         textView.setLayoutParams(params);
                         holder.addView(textView);
                         parts.add(textView);

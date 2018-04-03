@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 public class TaskDownloader {
 
+    private Context context;
+
     private RequestQueue queue;
 
     private File mainDir;
@@ -39,8 +41,11 @@ public class TaskDownloader {
     private final String hashTag = "hash";
     private final String hashUrl = "http://silvertests.ru/XML/GetQuestionsHashPython.ashx";
     private final String tasksUrl = "http://silvertests.ru/XML/GetQuestionsPython.ashx";
+    public String netHash = null;
 
-    public TaskDownloader(Context context, boolean needsAuto) {
+    public TaskDownloader(Context context) {
+
+        this.context = context;
 
         mainDir = new File(context.getFilesDir(), "tasks");
         if (!mainDir.exists()) mainDir.mkdir();
@@ -50,32 +55,27 @@ public class TaskDownloader {
         hashFile = new File(mainDir, "hash.xml");
 
         queue = QueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
-
-        if (needsAuto) {
-            StringRequest hashRequest = new StringRequest(Request.Method.GET, hashUrl,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                if (need2dl(response)) {
-                                    writeFile(hashFile, response); // saving hash
-                                    downloadFile();
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    });
-            queue.add(hashRequest);
-        }
     }
 
-    private boolean need2dl(String hashXml) throws IOException {
+    public void makeHashRequest(final resInt ri) {
+        StringRequest hashRequest = new StringRequest(Request.Method.GET, hashUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        netHash = response;
+                        ri.good();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        ri.error();
+                    }
+                });
+        queue.add(hashRequest);
+    }
+
+    public boolean need2dl(String hashXml) throws IOException {
         boolean hashFileExists = hashFile.exists();
         boolean mainFileExists = mainFile.exists();
         logd("Hash file exists:", hashFileExists);
@@ -91,8 +91,7 @@ public class TaskDownloader {
 
     }
 
-    public void downloadFile() {
-
+    public void downloadFile(final resInt ri) {
         StringRequest tasksRequest = new StringRequest(Request.Method.GET, tasksUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -104,11 +103,13 @@ public class TaskDownloader {
                         } catch (IOException | XmlPullParserException e) {
                             e.printStackTrace();
                         }
+                        ri.good();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        ri.error();
                     }
                 });
         queue.add(tasksRequest);
@@ -132,6 +133,9 @@ public class TaskDownloader {
     }
 
     private void writeTask(String content) throws IOException, XmlPullParserException {
+        content = content.replaceAll("<span .*?>", "")
+                .replaceAll("<\\/span?>", "")
+                .replaceAll("<br .*?\\/>", "");
         FileOutputStream fos = new FileOutputStream(mainFile);
         fos.write(content.getBytes());
         fos.close();
@@ -186,5 +190,11 @@ public class TaskDownloader {
             builder.append(" ");
         }
         Log.d("FileDownloader", builder.toString());
+    }
+
+    public interface resInt {
+        void good();
+
+        void error();
     }
 }

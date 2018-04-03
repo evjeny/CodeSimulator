@@ -9,4 +9,8 @@
     <color name="green_dark">#098309</color>
     <color name="grey">#4b4b4b</color>
     <color name="red">#790000</color>
+
+    <color name="proger_light_green">#8de19a</color>
+    <color name="proger_dark_green">#5dbd75</color>
+    <color name="proger_weirdo">#d6b994</color>
 </resources>

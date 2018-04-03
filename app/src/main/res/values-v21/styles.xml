@@ -11,6 +11,15 @@
         <item name="android:navigationBarColor">@android:color/background_dark</item>
     </style>
 
+    <style name="ProgerTheme" parent="AppTheme" >
+        <item name="android:buttonStyle">@style/ProgerTheme.Button</item>
+    </style>
+
+    <style name="ProgerTheme.Button">
+        <item name="android:background">@drawable/proger_button_drawable</item>
+        <item name="android:padding">@dimen/button_padding</item>
+    </style>
+
     <style name="HackerTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:background">@color/black</item>
         <item name="android:textViewStyle">@style/HackerTheme.TextView</item>

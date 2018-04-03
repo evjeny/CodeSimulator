@@ -1,5 +1,6 @@
 package com.evjeny.hackersimulator.view;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -78,9 +79,15 @@ public class MainStory extends AppCompatActivity {
                         public void check(final String actName, String code, long id) {
                             Log.d("MainStory", "check: "+code+", "+id);
                             if (!code.equals("")) {
+                                final ProgressDialog dialog = ProgressDialog.show(MainStory.this,
+                                        "Обработка кода",
+                                        "Ваш код проверяется. Пожалуйста, подождите...",
+                                        true);
+                                dialog.setCancelable(false);
                                 sender.sendRequest(code, id, new TaskSender.ResultInterface() {
                                     @Override
                                     public void result(JSONObject res) {
+                                        dialog.dismiss();
                                         handleResult(actName, res);
                                     }
                                 });

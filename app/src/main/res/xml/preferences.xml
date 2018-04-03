@@ -4,4 +4,10 @@
         android:title="Скачать все файлы заново"
         android:key="reload_files"
         android:summary="Скачивает файлы с заданиями из сети" />
+    <EditTextPreference
+        android:defaultValue="22"
+        android:key="textSize"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Размер текста" />
 </PreferenceScreen>
