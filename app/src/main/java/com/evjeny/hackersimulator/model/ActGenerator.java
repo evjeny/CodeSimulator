@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -90,9 +91,12 @@ public class ActGenerator {
                 Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
-                    android.widget.Button b = new android.widget.Button(context);
+                    android.widget.Button b = new android.widget.Button(
+                            new ContextThemeWrapper(context, R.style.AppTheme_Button));
                     LinearLayout.LayoutParams params =
                             new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    int dim = (int) context.getResources().getDimension(R.dimen.button_margin);
+                    params.setMargins(dim, dim, dim, dim);
                     b.setLayoutParams(params);
 
                     b.setText((String) button.name);
@@ -143,11 +147,13 @@ public class ActGenerator {
                 Bar bar = act.bar;
                 buttonHolder.removeAllViews();
                 for (final Button button : bar.buttons) {
-                    android.widget.Button b = new android.widget.Button(context);
+                    android.widget.Button b = new android.widget.Button(
+                            new ContextThemeWrapper(context, R.style.AppTheme_Button));
                     LinearLayout.LayoutParams params =
                             new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    int dim = (int) context.getResources().getDimension(R.dimen.button_margin);
+                    params.setMargins(dim, dim, dim, dim);
                     b.setLayoutParams(params);
-
                     b.setText((String) button.name);
 
                     b.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +198,8 @@ public class ActGenerator {
                 final CodeContent content = (CodeContent) act.content;
                 final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+                int dim = (int) context.getResources().getDimension(R.dimen.button_margin);
+                params.setMargins(dim, dim, dim, dim);
                 final ArrayList<TextView> parts = new ArrayList<>();
 
                 for (CodePart codePart : content.getFragments()) {
@@ -216,7 +223,8 @@ public class ActGenerator {
                 for (final Button button : bar.buttons) {
                     final String action = button.action;
 
-                    android.widget.Button b = new android.widget.Button(context);
+                    android.widget.Button b = new android.widget.Button(
+                            new ContextThemeWrapper(context, R.style.AppTheme_Button));
 
                     b.setLayoutParams(params);
 

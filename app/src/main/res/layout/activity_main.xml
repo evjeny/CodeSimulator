@@ -9,22 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/continue_game"
-        android:onClick="continue_game"/>
+        android:onClick="continue_game"
+        style="@style/AppTheme.Button"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/new_game"
-        android:onClick="new_game"/>
+        android:onClick="new_game"
+        style="@style/AppTheme.Button"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/notebook"
-        android:onClick="notebook"/>
+        android:onClick="notebook"
+        style="@style/AppTheme.Button"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/settings"
-        android:onClick="settings"/>
+        android:onClick="settings"
+        style="@style/AppTheme.Button"/>
 </LinearLayout>

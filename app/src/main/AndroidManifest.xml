@@ -11,21 +11,33 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity">
+        <activity
+            android:name=".view.MainActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainStory" />
-        <activity android:name=".view.LevelCreator" />
-        <activity android:name=".view.LevelReader" />
-        <activity android:name=".view.NotebookActivity" />
+        <activity
+            android:name=".view.MainStory"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".view.LevelCreator"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".view.LevelReader"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".view.NotebookActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".view.NotebookViewerActivity"
             android:label="@string/title_activity_notebook_viewer" />
-        <activity android:name=".view.SettingsActivity" android:label="@string/settings" />
+        <activity
+            android:name=".view.SettingsActivity"
+            android:label="@string/settings" />
     </application>
 
 </manifest>
