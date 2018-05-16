@@ -1,0 +1,13 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>Всем привет. Кажется, мой день еще не начался...</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s1a3.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

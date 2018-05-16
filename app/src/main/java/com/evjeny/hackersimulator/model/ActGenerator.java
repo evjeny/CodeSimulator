@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.evjeny.hackersimulator.R;
@@ -41,6 +43,7 @@ public class ActGenerator {
     private Bundle args;
 
     private int textSize;
+    private int spaceMargin;
 
     public ActGenerator(Context context, FragmentManager manager, ViewGroup fragmentHolder,
                         ViewGroup buttonHolder, GameType type) {
@@ -54,6 +57,7 @@ public class ActGenerator {
 
         this.textSize = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("textSize", "22"));
+        this.spaceMargin = (int) context.getResources().getDimension(R.dimen.space_margin);
     }
 
     public void generateActAuto(final Act act, final storyInterface intf) {
@@ -126,6 +130,11 @@ public class ActGenerator {
                     });
                     buttonHolder.addView(b);
                 }
+                Space bottomSpace = new Space(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, getDPI(spaceMargin));
+                bottomSpace.setLayoutParams(params);
+                buttonHolder.addView(bottomSpace);
             }
         });
         transaction.commit();
@@ -180,6 +189,11 @@ public class ActGenerator {
                     });
                     buttonHolder.addView(b);
                 }
+                Space bottomSpace = new Space(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, getDPI(spaceMargin));
+                bottomSpace.setLayoutParams(params);
+                buttonHolder.addView(bottomSpace);
             }
         });
         transaction.commit();
@@ -257,9 +271,19 @@ public class ActGenerator {
                         b.setEnabled(false);
                     }
                 }
+                Space bottomSpace = new Space(context);
+                LinearLayout.LayoutParams ps = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, getDPI(spaceMargin));
+                bottomSpace.setLayoutParams(ps);
+                buttonHolder.addView(bottomSpace);
             }
         });
         transaction.commit();
+    }
+
+    private int getDPI(int size){
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size,
+                context.getResources().getDisplayMetrics());
     }
 
     public interface storyInterface {

@@ -1,0 +1,15 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>Вам уже знаком тип int, им вы пользовались на предыдущем уроке.</ci>
+			<ci>Про него достаточно знать, что он может хранить и отрицательные, и положительные целые числа.</ci>
+			<ci>float - дробные числа.</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s2a5.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

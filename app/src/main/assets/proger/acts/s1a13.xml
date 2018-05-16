@@ -1,0 +1,13 @@
+<scene>
+    <act type="image">
+        <content>
+            <ci src="s1p7.png"/>
+        </content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s1a14.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

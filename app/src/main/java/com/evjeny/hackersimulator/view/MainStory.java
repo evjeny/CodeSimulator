@@ -137,10 +137,11 @@ public class MainStory extends AppCompatActivity {
             input + " " + logTest);
 
             if (resultCode == 1) {
+                Toast.makeText(this, "GG", Toast.LENGTH_SHORT).show();
                 currentAct = actName;
                 pointerChangedInterface.onPointerChanged();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
                 builder.setTitle("Ошибка!");
                 String message = null;
                 if (resultCode == -1) {
@@ -193,7 +194,7 @@ public class MainStory extends AppCompatActivity {
     }
 
     private void showHint(String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
         builder.setTitle("Hint");
         builder.setMessage(text);
         builder.setNegativeButton("Ok", null);

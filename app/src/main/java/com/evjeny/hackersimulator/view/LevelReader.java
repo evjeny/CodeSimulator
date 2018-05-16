@@ -55,7 +55,8 @@ public class LevelReader extends AppCompatActivity {
         levels.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int pos, long l) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LevelReader.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LevelReader.this,
+                        R.style.MyAlertDialogStyle);
                 builder.setTitle(R.string.remove_q);
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override

@@ -1,0 +1,18 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>Подходят для записи текста. При объявлении берутся в кавычки.</ci>
+			<ci>B="Its a string"</ci>
+			<ci>D='Its a string too'</ci>
+			<ci>Для удобной записи многострочных переменных используются 3 кавычки.</ci>
+			<ci>multiline="""много-много строк"""</ci>
+			<ci>boolean - логический тип.</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s2a9.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

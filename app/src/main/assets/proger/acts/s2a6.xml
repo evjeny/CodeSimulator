@@ -1,0 +1,16 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>То же самое, что и int, но для десятичных дробей.</ci>
+			<ci>Дробная часть отделяется от целой точкой.</ci>
+			<ci>Например, V=1.23125</ci>
+			<ci>string - строки.</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s2a7.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

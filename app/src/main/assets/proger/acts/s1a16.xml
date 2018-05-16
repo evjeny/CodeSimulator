@@ -1,0 +1,17 @@
+<scene>
+        <act type="code">
+            <content>
+                <ci>s1t1</ci>
+            </content>
+            <bar>
+                <button type="text">
+                    <name>@string/next</name>
+                    <action>check_s1a17.xml</action>
+                </button>
+                <button type="text">
+                    <name>Подсказка</name>
+                    <action>hint</action>
+                </button>
+            </bar>
+        </act>
+    </scene>

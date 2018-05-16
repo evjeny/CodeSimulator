@@ -35,6 +35,8 @@ public class SettingsFragment extends PreferenceFragment {
                 downloader.downloadFile(new TaskDownloader.resInt() {
                     @Override
                     public void good() {
+                        Toast.makeText(context, "Все файлы заданий успешно загружены",
+                                Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
 

@@ -1,0 +1,15 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>Этот тип данных подходит для одного из двух состояний - True или False</ci>
+			<ci>Он будет очень полезен в следующих занятиях, когда мы начнем проходить условия.</ci>
+			<ci>А теперь о преобразовании типов</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s2a11.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>
