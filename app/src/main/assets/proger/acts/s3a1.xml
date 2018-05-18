@@ -1,0 +1,14 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>Забавно, если принять во внимание все детали, то жизнь абсолютно бессмысленна.</ci>
+			<ci>Вообще.</ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s3a2.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

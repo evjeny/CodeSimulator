@@ -1,0 +1,18 @@
+<scene>
+    <act type="image">
+        <content>
+            <ci src="s3p3.png">
+                <text text="кажется, еще один день"
+                    x="10" y="85" textSize="35" color="#ffffff"/>
+                <text text="пролетел незаметно..."
+                    x="12" y="92" textSize="35" color="#ffffff"/>
+            </ci>
+        </content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s4a1.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

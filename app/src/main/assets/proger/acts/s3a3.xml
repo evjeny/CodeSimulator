@@ -1,14 +1,14 @@
 <scene>
     <act type="image">
         <content>
-            <ci src="s1p5.png">
-                <text text="Всем привет, заходите!" x="30" y="90" textSize="35"/>
+            <ci src="s3p2.png">
+                <text text="Всем привет, заходите!" x="30" y="90" textSize="35" color="#5694FF"/>
             </ci>
         </content>
         <bar>
             <button type="text">
                 <name>@string/next</name>
-                <action>nextAct_s1a10.xml</action>
+                <action>nextAct_s3a4.xml</action>
             </button>
         </bar>
     </act>

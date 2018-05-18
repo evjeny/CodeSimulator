@@ -1,12 +1,12 @@
 <scene>
-    <act type="text">
+    <act type="image">
         <content>
-			<ci>Всем привет, заходите!</ci>
-</content>
+            <ci src="s4p1.png"/>
+        </content>
         <bar>
             <button type="text">
                 <name>@string/next</name>
-                <action>nextAct_s1a9.xml</action>
+                <action>nextAct_s4a2.xml</action>
             </button>
         </bar>
     </act>

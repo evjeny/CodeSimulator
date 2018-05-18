@@ -1,0 +1,20 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci>В цикле код будет выполняться много раз.</ci>
+			<ci>Цикл состоит из ключевого слова, условия и тела цикла (кода, который будет выполняться много раз).</ci>
+			<ci>В Питоне есть 2 вида циклов</ci>
+			<ci>Первый из них while. Он будет выполнять код до тех пора, пока верно условие. Например:</ci>
+			<ci><![CDATA[i_am_hungry = True<br>while i_am_hungry:<br>&emsp;print("Pls give me food")<br>&emsp;i_am_hungry = False]]></ci>
+			<ci>Пока переменная i_am_hungry равна True, будет выводиться текст "Pls give me food"</ci>
+			<ci>Таким образом можно сделать выводит чисел от 1 до 100</ci>
+			<ci><![CDATA[i = 1<br>while i &lt;= 100:<br>&emsp;print(i)<br>&emsp;i = i + 1]]></ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s4a5.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

@@ -1,0 +1,14 @@
+<scene>
+    <act type="text">
+        <content>
+			<ci><![CDATA[<p style="color:red;">Я могу послать пакеты один раз.<br>
+			Но чтобы уронить сервер, нужно делать это раз за разом.</p>]]></ci>
+</content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s4a3.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

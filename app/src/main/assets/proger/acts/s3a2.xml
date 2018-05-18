@@ -1,0 +1,18 @@
+<scene>
+    <act type="image">
+        <content>
+            <ci src="s3p1.png">
+                <text text="Все, что происходит -"
+                    textSize="35" x="30" y="80" color="#ffffff"/>
+                <text text="результат случайности, и..."
+                    textSize="35" x="30" y="90" color="#ffffff"/>
+            </ci>
+        </content>
+        <bar>
+            <button type="text">
+                <name>@string/next</name>
+                <action>nextAct_s3a3.xml</action>
+            </button>
+        </bar>
+    </act>
+</scene>

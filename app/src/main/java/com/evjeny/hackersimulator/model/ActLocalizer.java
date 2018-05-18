@@ -140,7 +140,7 @@ public class ActLocalizer {
                         float textSize = 20;
                         for (int i = 0; i < parser.getAttributeCount(); i++) {
                             if (parser.getAttributeName(i).equals(textTag)) {
-                                text = parser.getAttributeValue(i);
+                                text = getValFromText(parser.getAttributeValue(i));
                             } else if (parser.getAttributeName(i).equals(colorTag)) {
                                 color = Color.parseColor(parser.getAttributeValue(i));
                             } else if (parser.getAttributeName(i).equals(textSizeTag)) {
@@ -253,12 +253,10 @@ public class ActLocalizer {
     }
 
     private String getValFromText(String text) {
-
         if(text.matches(REGEX_RESOURCE_STRING)) {
-            return getStringByName(this.context, text);
-        } else {
-            return text;
+            text = getStringByName(this.context, text);
         }
+        return text.replace("\\n", "\n");
     }
 
     private String replaceResourceStrings(String source) {
