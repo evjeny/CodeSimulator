@@ -2,4 +2,6 @@
 <resources>
     <string name="data_types">Data types</string>
     <string name="basic_operations">Basic operations</string>
+    <string name="conditions">Conditions</string>
+    <string name="loops">Loops</string>
 </resources>

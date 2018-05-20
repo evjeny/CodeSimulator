@@ -1,0 +1,53 @@
+<p>
+    Цикл <b>while</b><br>
+    Выполняется до тех пор, пока логическое выражение равно <b>True</b><br>
+    <code>
+        while 1 == 1: <code style="color:grey;"># условие всегда истинно, цикл остановится не скоро...</code><br>
+        &emsp;print("1 == 1")
+    </code>
+</p>
+<p>
+    Цикл <b>for</b><br>
+    Перебирает все объекты в диапазоне<br>
+    <code>
+        for i in range(0, 10 + 1):<br>
+        &emsp;print(i) <code style="color:grey;"># цикл выведет числа от 0 до 10</code>
+    </code>
+    <code>
+        for i in range(100, 0, -1):<br>
+        &emsp;print(i) <code style="color:grey;"># цикл выведет числа от 100 до 1</code>
+    </code>
+</p>
+<p>
+    Операторы циклов<br><br>
+    <b>break</b> позволяет прервать цикл<br>
+    <code>
+        for i in range(1, 100 + 1):<br>
+        &emsp;if i == 50:<br>
+        &emsp;&emsp;break <code style="color:grey;"># когда <b>i</b> достигнет 50, цикл остановится</code><br>
+        &emsp;print(i)
+    </code>
+    <code>
+        i = 1<br>
+        while i < 100 + 1:<br>
+        &emsp;if i == 50:<br>
+        &emsp;&emsp;break <code style="color:grey;"># когда <b>i</b> достигнет 50, цикл остановится</code><br>
+        &emsp;print(i)<br>
+        &emsp;i += 1
+    </code>
+    <br><b>continue</b> позволяет перейти к следующей итерации<br>
+    <code>
+        for i in range(1, 100 + 1):<br>
+        &emsp;if i == 50:<br>
+        &emsp;&emsp;continue<br>
+        &emsp;print(i) <code style="color:grey;"># выведет все числа от 1 до 100 кроме 50</code>
+    </code>
+    <code>
+        i = 1<br>
+        while i < 100 + 1:<br>
+        &emsp;if i == 50:<br>
+        &emsp;&emsp;continue<br>
+        &emsp;print(i)<br> <code style="color:grey;"># выведет все числа от 1 до 100 кроме 50</code><br>
+        &emsp;i += 1
+    </code>
+</p>

@@ -2,4 +2,6 @@
 <resources>
     <string name="data_types">Типы данных</string>
     <string name="basic_operations">Базовые операции</string>
+    <string name="conditions">Условия</string>
+    <string name="loops">Циклы</string>
 </resources>
